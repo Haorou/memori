@@ -11,7 +11,7 @@ public class Joueur
 	public static final Scanner SCANNER = new Scanner(System.in);
 	private static int nombreDeJoueurs = 0;
 	private int numeroDuJoueur = 0;
-
+ 
 	private Carte[] choixJoueur = new Carte[] {new Carte(), new Carte()};
 	
 	private String nom = "";
