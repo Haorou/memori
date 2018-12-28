@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import carte.Carte;
 import carte.PaquetCartes;
 import jeu.Joueur;
@@ -69,22 +71,14 @@ public class Gestionnaire {
 	}
 	
 	
-	public static boolean afficherData()
+	public static List<String> listDePartieEnCours()
 	{
-		String message_a_afficher = gestionnairePlateau.afficherPartiesEnCours();
-		System.out.println(message_a_afficher);		
-		
-		return message_a_afficher != "";
+		return gestionnairePlateau.listDePartieEnCours();
 	}
 	
-	public static boolean afficherScore()
+	public static List<String> listDePartieFinie()
 	{
-		String message_a_afficher = "----------------------------------------------------------------------\n"
-									+ "Tableau des scores :\n";
-		message_a_afficher += gestionnairePlateau.afficherPartiesFinies();
-		System.out.println(message_a_afficher);		
-		
-		return message_a_afficher != "";
+		return  gestionnairePlateau.listDePartieFinie();
 	}
 		
 	public static boolean enregistrerVainqueur()

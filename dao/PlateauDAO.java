@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import jeu.Plateau;
@@ -230,13 +232,13 @@ public class PlateauDAO extends DAO<Plateau> {
 		return plateauLu;
 	}
 	
-	public String afficherPartiesEnCours()
+	public List<String> listDePartieEnCours()
 	{
 		String requete1 = "SELECT * FROM " + TABLE + " INNER JOIN participe ON plateau.id_plateau = participe.fk_id_plateau INNER JOIN joueur ON joueur.id_joueur = participe.fk_id_joueur WHERE plateau.id_plateau NOT IN ";
 		String requete2 = "(SELECT fk_id_plateau FROM gagnee) ORDER BY plateau.id_plateau";
 		ResultSet rs = Connexion.executeQuery(requete1 + requete2);
 
-		String message = "";
+		List<String> messages = new ArrayList<String>();
 		int compteur = 0;
 		int id_partie = 0;
 		try 
@@ -248,13 +250,14 @@ public class PlateauDAO extends DAO<Plateau> {
 					compteur++;
 					id_partie = rs.getInt("id_plateau");
 					dicoCompteurPlateau.put(compteur,id_partie);
-					message += "----------------------------------------------------------------------\n";
-					message += "La partie n°" + compteur + " ["+rs.getDate("date_utilisation")+"] est en cours.\n"
-							+ "Joueur "+rs.getInt("numero_joueur")+" : " + rs.getString("nom") + " [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]\n";					
+					           
+					messages.add("");
+					messages.add(" La partie n°" + compteur + " ["+rs.getDate("date_utilisation")+"] est en cours.");
+					messages.add(" Joueur "+rs.getInt("numero_joueur")+" : " + rs.getString("nom") + " [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]");					
 				}
 				else
 				{
-					message += "Joueur "+rs.getInt("numero_joueur")+" : " + rs.getString("nom") + " [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]\n";
+					messages.add(" Joueur "+rs.getInt("numero_joueur")+" : " + rs.getString("nom") + " [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]");
 				}
 			}
 		} 
@@ -262,32 +265,31 @@ public class PlateauDAO extends DAO<Plateau> {
 		{
 			e.printStackTrace();
 		}
-		return message;
+		return messages;
 	}
 	
-	public String afficherPartiesFinies()
+	public List<String> listDePartieFinie()
 	{
 		String requete1 = "SELECT * FROM " + TABLE + " INNER JOIN participe ON plateau.id_plateau = participe.fk_id_plateau INNER JOIN joueur ON joueur.id_joueur = participe.fk_id_joueur WHERE participe.fk_id_joueur IN ";
 		String requete2 = "(SELECT fk_id_joueur FROM gagnee)";
 
 		ResultSet rs = Connexion.executeQuery(requete1 + requete2);
 
-		String message = "";
+		List<String> messages = new ArrayList<String>();
 		try 
 		{
 			while(rs.next())
 			{
-				message += "----------------------------------------------------------------------\n";
-				message += "Lors de la partie ["+rs.getDate("date_utilisation")+"] :\n"
-						+ "Le joueur " + rs.getString("nom") + " à gagné [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]\n";					
+				messages.add("");
+				messages.add(" Lors de la partie ["+rs.getDate("date_utilisation")+"] :");
+				messages.add(" Le joueur " + rs.getString("nom") + " à gagné [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]");					
 			}
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
-		message += "----------------------------------------------------------------------\n";
-		return message;
+		return messages;
 	}
 	
 	public boolean deleteAll()

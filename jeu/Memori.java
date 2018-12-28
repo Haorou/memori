@@ -1,21 +1,44 @@
 package jeu;
 
+import java.util.List;
+
 import carte.PaquetCartes;
 import dao.Gestionnaire;
+import view.consoleView;
 
 public class Memori 
 {
-	private static boolean partieDispo;
+	private static List<String> partieDispo;
+	private static List<String> scoresDispo;
 	
 	public static void main (String[] args)
 	{
-		System.out.println("Bonjour et bienvenue dans le jeu du Memori \n");
-		partieDispo = Gestionnaire.afficherData();
-		Gestionnaire.afficherScore();
+		consoleView.afficherTitre("Memori");
+		
+		consoleView.afficherOptions("Parties en cours");
+		partieDispo = Gestionnaire.listDePartieEnCours();
+		if(partieDispo.isEmpty())
+			consoleView.afficherMessage("Aucune partie en cours disponible");
+		else
+			consoleView.afficherMessages(partieDispo);			
 
-		if(partieDispo)
+		consoleView.afficherMessage("");	
+		consoleView.afficherOptions("Scores");
+		consoleView.afficherMessage("");
+		
+		scoresDispo = Gestionnaire.listDePartieFinie();
+		if(scoresDispo.isEmpty())
 		{
-			System.out.println("Souhaitez vous reprendre une partie en cours ? [O]");
+			consoleView.afficherMessage("Aucune partie finie disponible");			
+			consoleView.afficherMessage("");
+		}
+		else
+			consoleView.afficherMessages(scoresDispo);
+
+		
+		if(!partieDispo.isEmpty())
+		{
+			consoleView.afficherOptions("Souhaitez vous reprendre une partie en cours ? [O]");
 
 			if(Joueur.SCANNER.next().toLowerCase().equals("o"))
 				reprisePartie();
@@ -24,16 +47,18 @@ public class Memori
 		}
 		else
 		{
-			System.out.println("Aucune partie n'est en cours \n");
+			consoleView.afficherMessage("Aucune partie n'est en cours");
 			nouvellePartie();
 		}
 	}
 	
 	private static void reprisePartie()
 	{
-		System.out.println("|---------------REPRISE DE PARTIE---------------|");
-
-		System.out.println("Quelle partie voulez vous reprendre ?");
+		consoleView.afficherOptions("Reprise de partie");
+		consoleView.afficherMessage("");
+		consoleView.afficherMessage("Quelle partie voulez vous reprendre ? [n°]");
+		consoleView.afficherMessage("");
+		
 		Gestionnaire.preparerCartesJoueursEtPlateau();
 
 		Plateau.jouerAuMemori();
@@ -41,7 +66,7 @@ public class Memori
 	
 	private static void nouvellePartie()
 	{
-		System.out.println("|----------LANCEMENT NOUVELLE PARTIE----------|");
+		consoleView.afficherOptions("Lancement nouvelle parie");
 		PaquetCartes.PremierPaquetCartes(combienDeMotifsEnJeu());
 		
 		Plateau.combienCreerDeJoueurs();
@@ -57,7 +82,9 @@ public class Memori
 		
 		while(nombreDeMotifs < 4 || nombreDeMotifs > 10)
 		{
-			System.out.println("Combien de motifs voulez vous ? [4 à 10]");
+			consoleView.afficherMessage("");
+			consoleView.afficherMessage("Combien de motifs voulez vous ? [4 à 10]");
+			consoleView.afficherMessage("");
 			nombreDeMotifs = Joueur.SCANNER.nextInt();			
 		}
 		return nombreDeMotifs;

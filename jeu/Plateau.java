@@ -9,6 +9,7 @@ import carte.Carte;
 import carte.Motif;
 import carte.PaquetCartes;
 import dao.Gestionnaire;
+import view.consoleView;
 
 public class Plateau {
 	public static int id_plateau;
@@ -75,7 +76,9 @@ public class Plateau {
 		int reponse = 0;
 		while(reponse < 1 || reponse >2)
 		{
-			System.out.println("Souhaitez vous jouer seul ou à deux ? [1-2]");
+			consoleView.afficherMessage("");
+			consoleView.afficherMessage("Souhaitez vous jouer seul ou à deux ? [1-2]");
+			consoleView.afficherMessage("");
 			reponse = Joueur.SCANNER.nextInt();
 		}
 
@@ -100,19 +103,19 @@ public class Plateau {
 		while(!estVictorieux())
 		{
 			if(nombreDeJoueurs() > 1)
-				System.out.println("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
+				consoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
 
 			//----- CHOIX DE LA PREMIERE CARTE -----// 
 			if(joueurActuel.getPremiereCarte().getPositionIndexPaquet() == -1)
 			{
-				System.out.println("Temps de jeu : " + tempsDeJeu());
-				System.out.println("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
+				consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
+				consoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
 				
 				int valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;
 				while(valeurChoix1Joueur < 0 || valeurChoix1Joueur > getPaquetJeuTaille() -1 ||
 						retournerCarte(valeurChoix1Joueur).getEstTrouve())
 				{
-					System.out.println("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
+					consoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
 					valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;				
 				}
 				
@@ -127,8 +130,9 @@ public class Plateau {
 			}
 			afficherPlateau();	
 			//----- CHOIX DE LA DEUXIEME CARTE -----//
-			System.out.println("Temps de jeu : " + tempsDeJeu());
-			System.out.println("Veuillez choisir une seconde carte : [1-" + getPaquetJeuTaille() + "]");
+			consoleView.afficherMessage("");
+			consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
+			consoleView.afficherMessage("Veuillez choisir une seconde carte : [1-" + getPaquetJeuTaille() + "]");
 			
 			int valeurChoix2Joueur = Joueur.SCANNER.nextInt() -1;
 
@@ -136,7 +140,7 @@ public class Plateau {
 					retournerCarte(valeurChoix2Joueur).getEstTrouve() ||  
 					retournerCarte(valeurChoix2Joueur) == joueurActuel.getPremiereCarte())
 			{
-				System.out.println("Veuillez choisir une autre seconde carte : [1-" + getPaquetJeuTaille() + "]");	
+				consoleView.afficherMessage("Veuillez choisir une autre seconde carte : [1-" + getPaquetJeuTaille() + "]");	
 				valeurChoix2Joueur = Joueur.SCANNER.nextInt() -1;				
 			}
 			
@@ -213,19 +217,19 @@ public class Plateau {
 	//----------------GERER AFFICHAGE PLATEAU----------------//
 	private static void afficherPlateau()
 	{	
-		String affichagePlateau = "";
+		List<String> affichagePlateau = new ArrayList<String>();
 		int tourDeBoucle;
 		for (int i = 0; i < getPaquetJeuTaille(); i++) 
 		{
 			tourDeBoucle = i;
-			affichagePlateau += lignePlateau(tourDeBoucle, i ,0);
-			affichagePlateau += lignePlateau(tourDeBoucle, i ,1);
-			affichagePlateau += lignePlateau(tourDeBoucle, i ,2);
-			affichagePlateau += lignePlateau(tourDeBoucle, i ,1);
-			affichagePlateau += lignePlateau(tourDeBoucle, i ,3);
+			affichagePlateau.add(lignePlateau(tourDeBoucle, i ,0));
+			affichagePlateau.add(lignePlateau(tourDeBoucle, i ,1));
+			affichagePlateau.add(lignePlateau(tourDeBoucle, i ,2));
+			affichagePlateau.add(lignePlateau(tourDeBoucle, i ,1));
+			affichagePlateau.add(lignePlateau(tourDeBoucle, i ,3));
 			i += 3;
 		}		
-		System.out.println(affichagePlateau);
+		consoleView.afficherMessages(affichagePlateau);
 	}
 
 	private static String lignePlateau(int tourDeboucle, int tourDeBoucleIntra, int numeroTemplate)
@@ -235,7 +239,7 @@ public class Plateau {
 		for (tourDeBoucleIntra = tourDeboucle; tourDeBoucleIntra < tourDeboucle + 4; tourDeBoucleIntra++) {
 			ligne += retournerTemplate(numeroTemplate, tourDeBoucleIntra);
 		}
-		return ligne += "\n";
+		return ligne;
 	}
 	
 	private static String retournerTemplate(int numeroTemplate, int tourDeBoucleIntra)
@@ -267,12 +271,13 @@ public class Plateau {
 	}
 	
 	private static void afficherMessageVainqueur()
-	{		
+	{
+		List<String> messages = new ArrayList<String>();
 		if(nombreDeJoueurs() == 1)
 		{
 			joueurVainqueur = joueurActuel;
-			System.out.println("BRAVO " + joueurActuel.getNom() + " vous avez gagnez ! \n"
-				+ "Vous avez eu " + joueurActuel.getNombreErreurs() + " erreur(s) en " + tempsDeJeu());			
+			messages.add("BRAVO " + joueurActuel.getNom() + " vous avez gagnez !");
+			messages.add("Vous avez eu " + joueurActuel.getNombreErreurs() + " erreur(s) en " + tempsDeJeu());			
 		}
 		else
 		{
@@ -280,49 +285,50 @@ public class Plateau {
 			if(joueurs.get(0).getNombrePoints() > joueurs.get(1).getNombrePoints())
 			{
 				joueurVainqueur = joueurs.get(0);
-				System.out.println("BRAVO " + joueurs.get(0).getNom() + " vous avez gagnez ! \n"
-						+ "Vous avez le plus de points : " + joueurs.get(0).getNombrePoints());
-				System.out.println("Désolé pour " + joueurs.get(1).getNom() + "\n"
-						+ "Vous avez eu moins de points : " + joueurs.get(1).getNombrePoints());
-				System.out.println("La partie s'est déroulée en : " +  tempsDeJeu());
+				messages.add("BRAVO " + joueurs.get(0).getNom() + " vous avez gagnez !");
+				messages.add("Vous avez le plus de points : " + joueurs.get(0).getNombrePoints());
+				messages.add("Désolé pour " + joueurs.get(1).getNom());
+				messages.add("Vous avez eu moins de points : " + joueurs.get(1).getNombrePoints());
+				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
 			}
 			else if(joueurs.get(1).getNombrePoints() > joueurs.get(0).getNombrePoints())
 			{
 				joueurVainqueur = joueurs.get(1);
-				System.out.println("BRAVO " + joueurs.get(1).getNom() + " vous avez gagnez ! \n"
-						+ "Vous avez le plus de points : " + joueurs.get(1).getNombrePoints());
-				System.out.println("Désolé pour " + joueurs.get(0).getNom() + "\n"
-						+ "Vous avez eu moins de points : " + joueurs.get(0).getNombrePoints());
-				System.out.println("La partie s'est déroulée en : " +  tempsDeJeu());
-				
+				messages.add("BRAVO " + joueurs.get(1).getNom() + " vous avez gagnez !");
+				messages.add("Vous avez le plus de points : " + joueurs.get(1).getNombrePoints());
+				messages.add("Désolé pour " + joueurs.get(0).getNom());
+				messages.add("Vous avez eu moins de points : " + joueurs.get(0).getNombrePoints());
+				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
 			}
 			else if(joueurs.get(0).getNombrePoints() == joueurs.get(1).getNombrePoints() && 
 					joueurs.get(0).getNombreErreurs() < joueurs.get(1).getNombreErreurs())
 			{
 				joueurVainqueur = joueurs.get(0);
-				System.out.println(joueurs.get(0).getNom() + " et " + joueurs.get(1).getNom() + " êtes à égalité en terme de points  \n"
-						+ "Mais "+ joueurs.get(0).getNom() + " a moins d'erreurs : " + joueurs.get(0).getNombreErreurs() + "\n"
-						+ "Alors que " + joueurs.get(1).getNom() + " a plus d'erreurs : " + joueurs.get(1).getNombreErreurs());
-				System.out.println("Désolé pour " + joueurs.get(1).getNom() + ", " + joueurs.get(0).getNom() +" a gagné ! BRAVO !");
-				System.out.println("La partie s'est déroulée en : " +  tempsDeJeu());				
+				messages.add(joueurs.get(0).getNom() + " et " + joueurs.get(1).getNom() + " êtes à égalité en terme de points");
+				messages.add("Mais "+ joueurs.get(0).getNom() + " a moins d'erreurs : " + joueurs.get(0).getNombreErreurs());
+				messages.add("Alors que " + joueurs.get(1).getNom() + " a plus d'erreurs : " + joueurs.get(1).getNombreErreurs());
+				messages.add("Désolé pour " + joueurs.get(1).getNom() + ", " + joueurs.get(0).getNom() +" a gagné ! BRAVO !");
+				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());				
 			}
 			else if(joueurs.get(0).getNombrePoints() == joueurs.get(1).getNombrePoints() && 
 					joueurs.get(1).getNombreErreurs() < joueurs.get(0).getNombreErreurs())
 			{
 				joueurVainqueur = joueurs.get(1);
-				System.out.println(joueurs.get(1).getNom() + " et " + joueurs.get(0).getNom() + " êtes à égalité en terme de points  \n"
-						+ "Mais "+ joueurs.get(1).getNom() + " a moins d'erreurs : " + joueurs.get(1).getNombreErreurs() + "\n"
-						+ "Alors que " + joueurs.get(0).getNom() + " a plus d'erreurs : " + joueurs.get(0).getNombreErreurs());
-				System.out.println("Désolé pour " + joueurs.get(0).getNom() + ", " + joueurs.get(1).getNom() +" a gagné ! BRAVO !");
-				System.out.println("La partie s'est déroulée en : " +  tempsDeJeu());		
+				messages.add(joueurs.get(1).getNom() + " et " + joueurs.get(0).getNom() + " êtes à égalité en terme de points");
+				messages.add("Mais "+ joueurs.get(1).getNom() + " a moins d'erreurs : " + joueurs.get(1).getNombreErreurs());
+				messages.add("Alors que " + joueurs.get(0).getNom() + " a plus d'erreurs : " + joueurs.get(0).getNombreErreurs());
+				messages.add("Désolé pour " + joueurs.get(0).getNom() + ", " + joueurs.get(1).getNom() +" a gagné ! BRAVO !");
+				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());		
 			}
 			else
 			{
-				System.out.println(joueurs.get(1).getNom() + " et " + joueurs.get(0).getNom() + " êtes à égalité en terme de points  \n"
-						+ "Vous êtes également à égalité en terme de nombre d'erreurs (" + joueurs.get(0).getNombreErreurs() + ")");
-				System.out.println("Bravo à vous ! C'était malgré tout une belle partie. Elle s'est déroulée en : " +  tempsDeJeu());						
+				messages.add(joueurs.get(1).getNom() + " et " + joueurs.get(0).getNom() + " êtes à égalité en terme de points");
+				messages.add("Vous êtes également à égalité en terme de nombre d'erreurs (" + joueurs.get(0).getNombreErreurs() + ")");
+				messages.add("Bravo à vous ! C'était malgré tout une belle partie. Elle s'est déroulée en : " +  tempsDeJeu());						
 			}
 		}
+		consoleView.afficherMessages(messages);
+		
 		Gestionnaire.enregistrerVainqueur();
 		Gestionnaire.supprimerCartesDuPaquet();
 		Gestionnaire.supprimerJoueurCourant();

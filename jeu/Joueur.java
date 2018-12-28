@@ -3,6 +3,7 @@ package jeu;
 import java.util.Scanner;
 
 import carte.Carte;
+import view.consoleView;
 
 public class Joueur 
 {	
@@ -143,13 +144,17 @@ public class Joueur
 	
 	private String choisirSonNom()
 	{
-		System.out.println("Veuillez choisir un nom pour le joueur : " + this.getNumeroJoueur() );
+		consoleView.afficherMessage("");
+		consoleView.afficherMessage("Veuillez choisir un nom pour le joueur : " + this.getNumeroJoueur());
+		consoleView.afficherMessage("");		
 		return SCANNER.next();
 	}
 	
 	private int choisirSonAnneeDeNaissance()
 	{
-		System.out.println(this.nom + ", veuillez donner votre année de naissance : ");
+		consoleView.afficherMessage("");
+		consoleView.afficherMessage("this.nom + \", veuillez donner votre année de naissance : ");
+		consoleView.afficherMessage("");
 		return SCANNER.nextInt();
 	}
 }
