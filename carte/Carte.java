@@ -1,24 +1,28 @@
 package carte;
 
+import carte.motif.IMotif;
+import carte.motif.Motif;
+import carte.motif.Motif_Memori;
+
 public class Carte {
 	
 	private int id_carte;
 	
-	private final Motif motifCarte;	
-	private Motif affichage = Motif.DOS;
+	private final IMotif motifCarte;	
+	private IMotif affichage = Motif.DOS;
 	private boolean estTrouve = false;
 	private int positionIndexPaquet = -1;
 	
 	public Carte()
 	{
-		this.motifCarte = Motif.get(11);
+		this.motifCarte = Motif.DOS;
 	}
 	
 	public Carte(int indiceMotif) {
-		this.motifCarte = Motif.get(indiceMotif);
+		this.motifCarte = Motif_Memori.get(indiceMotif);
 	}
 	
-	public Carte(Motif motifDB, boolean estTrouveDB, int positionIndexPaquetDB, int id_carteDB)
+	public Carte(IMotif motifDB, boolean estTrouveDB, int positionIndexPaquetDB, int id_carteDB)
 	{
 		this.motifCarte = motifDB;
 		this.estTrouve = estTrouveDB;
@@ -30,7 +34,7 @@ public class Carte {
 		this.id_carte = id_carteDB;
 	}
 	
-	public Carte(Motif motifDB, boolean estTrouveDB, int positionIndexPaquetDB)
+	public Carte(IMotif motifDB, boolean estTrouveDB, int positionIndexPaquetDB)
 	{
 		this.motifCarte = motifDB;
 		this.estTrouve = estTrouveDB;
@@ -43,8 +47,8 @@ public class Carte {
 	
 	public int getId()              {   return this.id_carte;   }
 	public void setId(int id)       {   this.id_carte=id;   	}
-	public Motif getMotif()			{	return this.motifCarte;	}
-	public Motif getAffichage()		{	return this.affichage;	}
+	public IMotif getMotif()			{	return this.motifCarte;	}
+	public IMotif getAffichage()		{	return this.affichage;	}
 	public boolean getEstTrouve()	{	return this.estTrouve;	}
 	
 	

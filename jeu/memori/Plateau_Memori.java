@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import carte.Carte;
-import carte.Motif;
 import carte.PaquetCartes;
+import carte.motif.Motif_Memori;
 import dao.Gestionnaire;
 import jeu.Joueur;
 import view.consoleView;
@@ -267,9 +267,9 @@ public class Plateau_Memori {
 		return template;
 	}
 	
-	private static Motif afficherCarte(int indice)
+	private static Motif_Memori afficherCarte(int indice)
 	{
-		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif.VIDE;
+		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif_Memori.VIDE;
 	}
 	
 	private static void afficherMessageVainqueur()

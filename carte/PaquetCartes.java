@@ -9,10 +9,20 @@ public class PaquetCartes
 	public static List<Carte> paquetCartes;
 	private static int taillePaquet;
 		
-	public static void PremierPaquetCartes(int nombreDeMotifs) {
+	public static void premierPaquetCartes_Memori(int nombreDeMotifs) {
 	
 		taillePaquet = nombreDeMotifs * 2;
-		remplirPaquetCartes(nombreDeMotifs);
+		remplirPaquetCartes_Memori(nombreDeMotifs);
+		
+		Collections.shuffle(paquetCartes);
+		
+		setIndexCarte();
+	}
+	
+	public static void premierPaquetCartes_PetitVerger() 
+	{	
+		taillePaquet = 15;
+		remplirPaquetCartes_PetitVerger();
 		
 		Collections.shuffle(paquetCartes);
 		
@@ -52,13 +62,22 @@ public class PaquetCartes
 		}
 	}
 	
-	private static void remplirPaquetCartes(int nombreDeMotifs) {
+	private static void remplirPaquetCartes_Memori(int nombreDeMotifs) {
 		paquetCartes = new ArrayList<Carte>(taillePaquet);
 		
 		for (int i = 0; i < nombreDeMotifs; i++) {
 			for (int j = 0; j < 2; j++) {
 				add(new Carte(i));	
 			}
+		}
+	}
+	
+	private static void remplirPaquetCartes_PetitVerger() {
+		paquetCartes = new ArrayList<Carte>(taillePaquet);
+		
+		for (int i = 0; i < 15; i++) 
+		{
+				add(new Carte(i));	
 		}
 	}
 

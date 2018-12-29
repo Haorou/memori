@@ -72,7 +72,7 @@ public class Memori
 	private static void nouvellePartie()
 	{
 		consoleView.afficherOptions("Lancement nouvelle parie");
-		PaquetCartes.PremierPaquetCartes(combienDeMotifsEnJeu());
+		PaquetCartes.premierPaquetCartes_Memori(combienDeMotifsEnJeu());
 		
 		Plateau_Memori.combienCreerDeJoueurs();
 		

@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import carte.Carte;
-import carte.Motif;
 import carte.PaquetCartes;
+import carte.motif.Motif_Memori;
 import jeu.memori.Plateau_Memori;
 
 public class CartesDAO extends DAO<Carte> {
@@ -31,7 +31,7 @@ public class CartesDAO extends DAO<Carte> {
 					+ " (fk_id_motif_carte,est_trouve,position_carte,fk_id_plateau) VALUES(?,?,?,?)";
 			PreparedStatement pst = Connexion.getInstance().prepareStatement(requete, Statement.RETURN_GENERATED_KEYS);
 
-			pst.setInt(1, obj.getMotif().ordinal());
+			pst.setInt(1, (obj.getMotif()).ordinal());
 			pst.setInt(2, obj.getEstTrouve()?1:0);
 			pst.setInt(3, obj.getPositionIndexPaquet() == -1 ? null:obj.getPositionIndexPaquet());
 			pst.setInt(4, Plateau_Memori.id_plateau);
@@ -76,7 +76,7 @@ public class CartesDAO extends DAO<Carte> {
 							+ "SET fk_id_motif_carte = ?, est_trouve = ? WHERE "
 							+ CLE + " = ?");
 
-			pst.setInt(1, obj.getMotif().ordinal());
+			pst.setInt(1, (obj.getMotif()).ordinal());
 			pst.setInt(2, obj.getEstTrouve()?1:0);
 			pst.setInt(3, obj.getId());
 			pst.executeUpdate();
@@ -104,7 +104,7 @@ public class CartesDAO extends DAO<Carte> {
 					positionIndex = -1;
 				
 				carteLu = new Carte(
-						Motif.get(rs.getInt("fk_id_motif_carte")), 
+						Motif_Memori.get(rs.getInt("fk_id_motif_carte")), 
 						rs.getInt("est_trouve") == 1 ?true:false,
 						positionIndex);
 				
