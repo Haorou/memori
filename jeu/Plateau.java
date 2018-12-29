@@ -108,6 +108,7 @@ public class Plateau {
 			//----- CHOIX DE LA PREMIERE CARTE -----// 
 			if(joueurActuel.getPremiereCarte().getPositionIndexPaquet() == -1)
 			{
+				consoleView.afficherMessage("");
 				consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
 				consoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
 				

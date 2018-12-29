@@ -153,7 +153,7 @@ public class Joueur
 	private int choisirSonAnneeDeNaissance()
 	{
 		consoleView.afficherMessage("");
-		consoleView.afficherMessage("this.nom + \", veuillez donner votre année de naissance : ");
+		consoleView.afficherMessage(this.nom + ", veuillez donner votre année de naissance : ");
 		consoleView.afficherMessage("");
 		return SCANNER.nextInt();
 	}

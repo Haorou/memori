@@ -253,11 +253,11 @@ public class PlateauDAO extends DAO<Plateau> {
 					           
 					messages.add("");
 					messages.add(" La partie n°" + compteur + " ["+rs.getDate("date_utilisation")+"] est en cours.");
-					messages.add(" Joueur "+rs.getInt("numero_joueur")+" : " + rs.getString("nom") + " [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]");					
+					messages.add(" Joueur "+rs.getInt("numero_joueur")+" : " + rs.getString("nom") + " [points = "+ rs.getInt("nombre_points")+" | erreurs = "+ rs.getString("nombre_erreurs") +"]");					
 				}
 				else
 				{
-					messages.add(" Joueur "+rs.getInt("numero_joueur")+" : " + rs.getString("nom") + " [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]");
+					messages.add(" Joueur "+rs.getInt("numero_joueur")+" : " + rs.getString("nom") + " [points = "+ rs.getInt("nombre_points")+" | erreurs = "+ rs.getString("nombre_erreurs") +"]");
 				}
 			}
 		} 
@@ -271,7 +271,7 @@ public class PlateauDAO extends DAO<Plateau> {
 	public List<String> listDePartieFinie()
 	{
 		String requete1 = "SELECT * FROM " + TABLE + " INNER JOIN participe ON plateau.id_plateau = participe.fk_id_plateau INNER JOIN joueur ON joueur.id_joueur = participe.fk_id_joueur WHERE participe.fk_id_joueur IN ";
-		String requete2 = "(SELECT fk_id_joueur FROM gagnee)";
+		String requete2 = "(SELECT fk_id_joueur FROM gagnee) AND participe.fk_id_plateau IN (SELECT fk_id_plateau FROM gagnee) ";
 
 		ResultSet rs = Connexion.executeQuery(requete1 + requete2);
 
@@ -282,7 +282,7 @@ public class PlateauDAO extends DAO<Plateau> {
 			{
 				messages.add("");
 				messages.add(" Lors de la partie ["+rs.getDate("date_utilisation")+"] :");
-				messages.add(" Le joueur " + rs.getString("nom") + " à gagné [nombre de points = "+ rs.getInt("nombre_points")+" | nombre d'erreurs = "+ rs.getString("nombre_erreurs") +"]");					
+				messages.add(" Le joueur " + rs.getString("nom") + " à gagné [points = "+ rs.getInt("nombre_points")+" | erreurs = "+ rs.getString("nombre_erreurs") +"]");					
 			}
 		} 
 		catch (SQLException e) 

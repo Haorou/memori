@@ -18,13 +18,15 @@ public class Memori
 		consoleView.afficherOptions("Parties en cours");
 		partieDispo = Gestionnaire.listDePartieEnCours();
 		if(partieDispo.isEmpty())
+		{
+			consoleView.afficherMessage("");
 			consoleView.afficherMessage("Aucune partie en cours disponible");
+		}
 		else
 			consoleView.afficherMessages(partieDispo);			
 
 		consoleView.afficherMessage("");	
 		consoleView.afficherOptions("Scores");
-		consoleView.afficherMessage("");
 		
 		scoresDispo = Gestionnaire.listDePartieFinie();
 		if(scoresDispo.isEmpty())
@@ -33,7 +35,10 @@ public class Memori
 			consoleView.afficherMessage("");
 		}
 		else
-			consoleView.afficherMessages(scoresDispo);
+		{
+			consoleView.afficherMessages(scoresDispo);			
+			consoleView.afficherMessage("");
+		}
 
 		
 		if(!partieDispo.isEmpty())
@@ -47,7 +52,6 @@ public class Memori
 		}
 		else
 		{
-			consoleView.afficherMessage("Aucune partie n'est en cours");
 			nouvellePartie();
 		}
 	}
