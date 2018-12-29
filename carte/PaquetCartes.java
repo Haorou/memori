@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import carte.motif.Motif_Memori;
+import carte.motif.Motif_PetitVerger;
+
 public class PaquetCartes 
 {
 	public static List<Carte> paquetCartes;
@@ -67,7 +70,7 @@ public class PaquetCartes
 		
 		for (int i = 0; i < nombreDeMotifs; i++) {
 			for (int j = 0; j < 2; j++) {
-				add(new Carte(i));	
+				add( new Carte( Motif_Memori.get(i) ) );	
 			}
 		}
 	}
@@ -75,9 +78,19 @@ public class PaquetCartes
 	private static void remplirPaquetCartes_PetitVerger() {
 		paquetCartes = new ArrayList<Carte>(taillePaquet);
 		
-		for (int i = 0; i < 15; i++) 
+		for (int i = 0; i < 6; i++) 
 		{
-				add(new Carte(i));	
+			add( new Carte( Motif_PetitVerger.CORBEAU ) );	
+		}
+		
+		for (int i = 0; i < 5; i++) 
+		{
+			add( new Carte( Motif_PetitVerger.CERISE ) );	
+		}
+		
+		for (int i = 0; i < 4; i++) 
+		{
+			add( new Carte( Motif_PetitVerger.ANIMAL ) );	
 		}
 	}
 

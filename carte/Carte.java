@@ -2,7 +2,6 @@ package carte;
 
 import carte.motif.IMotif;
 import carte.motif.Motif;
-import carte.motif.Motif_Memori;
 
 public class Carte {
 	
@@ -18,10 +17,10 @@ public class Carte {
 		this.motifCarte = Motif.DOS;
 	}
 	
-	public Carte(int indiceMotif) {
-		this.motifCarte = Motif_Memori.get(indiceMotif);
+	public Carte(IMotif motif) {
+		this.motifCarte = motif;
 	}
-	
+
 	public Carte(IMotif motifDB, boolean estTrouveDB, int positionIndexPaquetDB, int id_carteDB)
 	{
 		this.motifCarte = motifDB;
