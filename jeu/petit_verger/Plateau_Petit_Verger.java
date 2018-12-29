@@ -1,4 +1,4 @@
-package jeu;
+package jeu.petit_verger;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,9 +9,10 @@ import carte.Carte;
 import carte.Motif;
 import carte.PaquetCartes;
 import dao.Gestionnaire;
+import jeu.Joueur;
 import view.consoleView;
 
-public class Plateau {
+public class Plateau_Petit_Verger {
 	public static int id_plateau;
 	
 	private static long tempsDeJeuMillisDB;
@@ -23,7 +24,7 @@ public class Plateau {
 	public static Joueur joueurActuel;
 	public static Joueur joueurVainqueur = null;
 
-	public Plateau(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB, int id_plateauDB)
+	public Plateau_Petit_Verger(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB, int id_plateauDB)
 	{
 		date_derniere_utilisationDB = date_derniere_utilisation;
 		tempsDeJeuMillisDB = tempsDeJeuMillis;
@@ -35,7 +36,7 @@ public class Plateau {
 		id_plateau = id_plateauDB;
 	}
 	
-	public Plateau(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB)
+	public Plateau_Petit_Verger(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB)
 	{
 		date_derniere_utilisationDB = date_derniere_utilisation;
 		tempsDeJeuMillisDB = tempsDeJeuMillis;

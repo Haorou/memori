@@ -1,9 +1,10 @@
-package jeu;
+package jeu.memori;
 
 import java.util.List;
 
 import carte.PaquetCartes;
 import dao.Gestionnaire;
+import jeu.Joueur;
 import view.consoleView;
 
 public class Memori 
@@ -65,7 +66,7 @@ public class Memori
 		
 		Gestionnaire.preparerCartesJoueursEtPlateau();
 
-		Plateau.jouerAuMemori();
+		Plateau_Memori.jouerAuMemori();
 	}
 	
 	private static void nouvellePartie()
@@ -73,11 +74,11 @@ public class Memori
 		consoleView.afficherOptions("Lancement nouvelle parie");
 		PaquetCartes.PremierPaquetCartes(combienDeMotifsEnJeu());
 		
-		Plateau.combienCreerDeJoueurs();
+		Plateau_Memori.combienCreerDeJoueurs();
 		
 		Gestionnaire.createDataPartie();
 
-		Plateau.jouerAuMemori();
+		Plateau_Memori.jouerAuMemori();
 	}
 	
 	private static int combienDeMotifsEnJeu()

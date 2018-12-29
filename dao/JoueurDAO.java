@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jeu.Joueur;
-import jeu.Plateau;
+import jeu.memori.Plateau_Memori;
 
 public class JoueurDAO extends DAO<Joueur> 
 {
@@ -90,7 +90,7 @@ public class JoueurDAO extends DAO<Joueur>
 			pst.setInt(2, obj.getNombrePoints());
 			pst.setInt(3, obj.getNumeroJoueur());
 			pst.setInt(4, obj.getId());			
-			pst.setInt(5, Plateau.id_plateau);
+			pst.setInt(5, Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 		} 
 		catch (SQLException e) 
@@ -134,7 +134,7 @@ public class JoueurDAO extends DAO<Joueur>
 			pst.setInt(1, obj.getNombreErreurs());
 			pst.setInt(2, obj.getNombrePoints());
 			pst.setInt(3, obj.getId());			
-			pst.setInt(4, Plateau.id_plateau);
+			pst.setInt(4, Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 		} 
 		catch (SQLException e) 
@@ -151,23 +151,23 @@ public class JoueurDAO extends DAO<Joueur>
 		boolean succes = true;
 		String requete = "INSERT INTO gagnee (fk_id_plateau, fk_id_joueur) VALUES(?,?)";
 		try {
-			if(Plateau.joueurVainqueur == null)
+			if(Plateau_Memori.joueurVainqueur == null)
 			{
 				PreparedStatement pst1 = Connexion.getInstance().prepareStatement(requete);
-				pst1.setInt(1, Plateau.id_plateau);
-				pst1.setInt(2, Plateau.getJoueur(0).getId());
+				pst1.setInt(1, Plateau_Memori.id_plateau);
+				pst1.setInt(2, Plateau_Memori.getJoueur(0).getId());
 				pst1.executeUpdate();
 				
 				PreparedStatement pst2 = Connexion.getInstance().prepareStatement(requete);
-				pst2.setInt(1, Plateau.id_plateau);
-				pst2.setInt(2, Plateau.getJoueur(1).getId());
+				pst2.setInt(1, Plateau_Memori.id_plateau);
+				pst2.setInt(2, Plateau_Memori.getJoueur(1).getId());
 				pst2.executeUpdate();
 			}
 			else
 			{
 				PreparedStatement pst = Connexion.getInstance().prepareStatement(requete);
-				pst.setInt(1, Plateau.id_plateau);
-				pst.setInt(2, Plateau.joueurVainqueur.getId());
+				pst.setInt(1, Plateau_Memori.id_plateau);
+				pst.setInt(2, Plateau_Memori.joueurVainqueur.getId());
 				pst.executeUpdate();
 			}			
 		}
@@ -261,7 +261,7 @@ public class JoueurDAO extends DAO<Joueur>
 		boolean succes = true;
 		try 
 		{
-			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM "+TABLE_JC+" WHERE fk_id_plateau = " + Plateau.id_plateau);
+			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM "+TABLE_JC+" WHERE fk_id_plateau = " + Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 			
 		} 

@@ -8,7 +8,7 @@ import java.sql.Statement;
 import carte.Carte;
 import carte.Motif;
 import carte.PaquetCartes;
-import jeu.Plateau;
+import jeu.memori.Plateau_Memori;
 
 public class CartesDAO extends DAO<Carte> {
 	private static final String TABLE = "carte";
@@ -34,7 +34,7 @@ public class CartesDAO extends DAO<Carte> {
 			pst.setInt(1, obj.getMotif().ordinal());
 			pst.setInt(2, obj.getEstTrouve()?1:0);
 			pst.setInt(3, obj.getPositionIndexPaquet() == -1 ? null:obj.getPositionIndexPaquet());
-			pst.setInt(4, Plateau.id_plateau);
+			pst.setInt(4, Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 			
 			ResultSet rs = pst.getGeneratedKeys();
@@ -127,8 +127,8 @@ public class CartesDAO extends DAO<Carte> {
 					.prepareStatement("INSERT INTO cartes_en_main(fk_id_carte, fk_id_joueur) "
 							+ "VALUES(?,?)");
 
-			pst.setInt(1, Plateau.joueurActuel.getPremiereCarte().getId());
-			pst.setInt(2, Plateau.joueurActuel.getId());
+			pst.setInt(1, Plateau_Memori.joueurActuel.getPremiereCarte().getId());
+			pst.setInt(2, Plateau_Memori.joueurActuel.getId());
 			pst.executeUpdate();
 		} 
 		catch (SQLException e) 
@@ -147,7 +147,7 @@ public class CartesDAO extends DAO<Carte> {
 			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM cartes_en_main WHERE "
 					+ "fk_id_joueur = ?");
 
-			pst.setInt(1, Plateau.joueurActuel.getId());
+			pst.setInt(1, Plateau_Memori.joueurActuel.getId());
 			pst.executeUpdate();
 			
 		} 
@@ -209,7 +209,7 @@ public class CartesDAO extends DAO<Carte> {
 		boolean succes = true;
 		try 
 		{
-			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM " + TABLE + " WHERE fk_id_plateau = " + Plateau.id_plateau);
+			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM " + TABLE + " WHERE fk_id_plateau = " + Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 			
 		} 

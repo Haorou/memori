@@ -10,46 +10,46 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jeu.Plateau;
+import jeu.memori.Plateau_Memori;
 
-public class PlateauDAO extends DAO<Plateau> {
+public class Plateau_MemoriDAO extends DAO<Plateau_Memori> {
 	private static final String TABLE = "plateau";
 	private static final String CLE = "id_plateau";
 	
 	public static Map<Integer, Integer> dicoCompteurPlateau = new HashMap<>();
-	private static PlateauDAO instance = null;
+	private static Plateau_MemoriDAO instance = null;
 
-	public static PlateauDAO getInstance() {
+	public static Plateau_MemoriDAO getInstance() {
 		if (instance == null) {
-			instance = new PlateauDAO();
+			instance = new Plateau_MemoriDAO();
 		}
 		return instance;
 	}
 
 	@Override
-	public boolean create(Plateau obj) {
+	public boolean create(Plateau_Memori obj) {
 		boolean succes = true;
 		try {
 			String requete = "INSERT INTO " + TABLE
 					+ " (temps_de_jeu,date_utilisation) VALUES(?,?)";
 			PreparedStatement pst = Connexion.getInstance().prepareStatement(requete,  Statement.RETURN_GENERATED_KEYS);
 
-			pst.setInt(1, (int) Plateau.tempsDeJeuMillis);
-			pst.setTimestamp(2, TransTypeSQL_GregorianCalendar.DateToTimestamp(Plateau.date_nouvelle_utilisation));
+			pst.setInt(1, (int) Plateau_Memori.tempsDeJeuMillis);
+			pst.setTimestamp(2, TransTypeSQL_GregorianCalendar.DateToTimestamp(Plateau_Memori.date_nouvelle_utilisation));
 			pst.executeUpdate();
 			
 			ResultSet rs = pst.getGeneratedKeys();
 			if(rs.next())
 			{
-				Plateau.id_plateau = rs.getInt(1);
+				Plateau_Memori.id_plateau = rs.getInt(1);
 			}
 			
 			String requete2 = "INSERT INTO joueur_courant"
 					+ " (fk_id_joueur,fk_id_plateau) VALUES(?,?)";
 			PreparedStatement pst2 = Connexion.getInstance().prepareStatement(requete2,  Statement.RETURN_GENERATED_KEYS);
 
-			pst2.setInt(1, Plateau.joueurActuel.getNumeroJoueur());
-			pst2.setInt(2, Plateau.id_plateau);
+			pst2.setInt(1, Plateau_Memori.joueurActuel.getNumeroJoueur());
+			pst2.setInt(2, Plateau_Memori.id_plateau);
 			pst2.executeUpdate();
 
 		} catch (SQLException e) {
@@ -70,14 +70,14 @@ public class PlateauDAO extends DAO<Plateau> {
 					+ " (temps_de_jeu,date_utilisation) VALUES(?,?)";
 			PreparedStatement pst = Connexion.getInstance().prepareStatement(requete,  Statement.RETURN_GENERATED_KEYS);
 
-			pst.setInt(1, (int) Plateau.tempsDeJeuMillis);
-			pst.setTimestamp(2, TransTypeSQL_GregorianCalendar.DateToTimestamp(Plateau.date_nouvelle_utilisation));
+			pst.setInt(1, (int) Plateau_Memori.tempsDeJeuMillis);
+			pst.setTimestamp(2, TransTypeSQL_GregorianCalendar.DateToTimestamp(Plateau_Memori.date_nouvelle_utilisation));
 			pst.executeUpdate();
 			
 			ResultSet rs = pst.getGeneratedKeys();
 			if(rs.next())
 			{
-				Plateau.id_plateau = rs.getInt(1);
+				Plateau_Memori.id_plateau = rs.getInt(1);
 			}
 
 		} catch (SQLException e) {
@@ -98,8 +98,8 @@ public class PlateauDAO extends DAO<Plateau> {
 					+ " (fk_id_joueur,fk_id_plateau) VALUES(?,?)";
 			PreparedStatement pst = Connexion.getInstance().prepareStatement(requete);
 
-			pst.setInt(1, Plateau.joueurActuel.getId());
-			pst.setInt(2, Plateau.id_plateau);
+			pst.setInt(1, Plateau_Memori.joueurActuel.getId());
+			pst.setInt(2, Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
@@ -117,8 +117,8 @@ public class PlateauDAO extends DAO<Plateau> {
 					+ " WHERE fk_id_plateau = ?";
 			PreparedStatement pst = Connexion.getInstance().prepareStatement(requete);
 
-			pst.setInt(1, Plateau.joueurActuel.getId());
-			pst.setInt(2, Plateau.id_plateau);
+			pst.setInt(1, Plateau_Memori.joueurActuel.getId());
+			pst.setInt(2, Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
@@ -130,7 +130,7 @@ public class PlateauDAO extends DAO<Plateau> {
 	}
 	
 	@Override
-	public boolean delete(Plateau obj) {
+	public boolean delete(Plateau_Memori obj) {
 		boolean succes = true;
 		try 
 		{
@@ -148,7 +148,7 @@ public class PlateauDAO extends DAO<Plateau> {
 	}
 
 	@Override
-	public boolean update(Plateau obj) {
+	public boolean update(Plateau_Memori obj) {
 		boolean succes = true;
 		try {
 			PreparedStatement pst = Connexion.getInstance()
@@ -156,10 +156,10 @@ public class PlateauDAO extends DAO<Plateau> {
 							+ "SET joueur_actuel = ?, temps_de_jeu = ?, date_utilisation = ? WHERE "
 							+ CLE + " = ?");
 
-			pst.setInt(1, Plateau.joueurActuel.getId());
-			pst.setInt(2, (int) Plateau.tempsDeJeuMillis);
-			pst.setTimestamp(3, TransTypeSQL_GregorianCalendar.DateToTimestamp(Plateau.date_nouvelle_utilisation));
-			pst.setInt(4, Plateau.id_plateau);
+			pst.setInt(1, Plateau_Memori.joueurActuel.getId());
+			pst.setInt(2, (int) Plateau_Memori.tempsDeJeuMillis);
+			pst.setTimestamp(3, TransTypeSQL_GregorianCalendar.DateToTimestamp(Plateau_Memori.date_nouvelle_utilisation));
+			pst.setInt(4, Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
@@ -181,9 +181,9 @@ public class PlateauDAO extends DAO<Plateau> {
 							+ "SET temps_de_jeu = ?, date_utilisation = ? WHERE "
 							+ CLE + " = ?");
 
-			pst.setInt(1, (int) Plateau.tempsDeJeuMillis);
-			pst.setTimestamp(2, TransTypeSQL_GregorianCalendar.DateToTimestamp(Plateau.date_nouvelle_utilisation));
-			pst.setInt(3, Plateau.id_plateau);
+			pst.setInt(1, (int) Plateau_Memori.tempsDeJeuMillis);
+			pst.setTimestamp(2, TransTypeSQL_GregorianCalendar.DateToTimestamp(Plateau_Memori.date_nouvelle_utilisation));
+			pst.setInt(3, Plateau_Memori.id_plateau);
 			pst.executeUpdate();
 
 			/*
@@ -209,15 +209,15 @@ public class PlateauDAO extends DAO<Plateau> {
 	}
 
 	@Override
-	public Plateau read(int id) {
+	public Plateau_Memori read(int id) {
 		ResultSet rs = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN joueur_courant ON joueur_courant.fk_id_plateau = plateau.id_plateau "
 				+ "WHERE " + CLE + " = " + id);
 		
-		Plateau plateauLu = null;
+		Plateau_Memori plateauLu = null;
 		try {
 			JoueurDAO joueurs_db = JoueurDAO.getInstance();
 			if (rs.next()) {
-				plateauLu = new Plateau(
+				plateauLu = new Plateau_Memori(
 						rs.getInt("temps_de_jeu"),
 						TransTypeSQL_GregorianCalendar.TimestampToDate(rs.getTimestamp("date_utilisation")),
 						joueurs_db.lireJoueursPlateauCourant(rs.getInt("id_plateau")),
