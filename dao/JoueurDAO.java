@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jeu.Joueur;
+import jeu.Plateau;
 import jeu.Plateau_Memori;
 
 public class JoueurDAO extends DAO<Joueur> 
@@ -90,7 +91,7 @@ public class JoueurDAO extends DAO<Joueur>
 			pst.setInt(2, obj.getNombrePoints());
 			pst.setInt(3, obj.getNumeroJoueur());
 			pst.setInt(4, obj.getId());			
-			pst.setInt(5, Plateau_Memori.id_plateau);
+			pst.setInt(5, Plateau.id_plateau);
 			pst.executeUpdate();
 		} 
 		catch (SQLException e) 
@@ -134,7 +135,7 @@ public class JoueurDAO extends DAO<Joueur>
 			pst.setInt(1, obj.getNombreErreurs());
 			pst.setInt(2, obj.getNombrePoints());
 			pst.setInt(3, obj.getId());			
-			pst.setInt(4, Plateau_Memori.id_plateau);
+			pst.setInt(4, Plateau.id_plateau);
 			pst.executeUpdate();
 		} 
 		catch (SQLException e) 
@@ -154,20 +155,20 @@ public class JoueurDAO extends DAO<Joueur>
 			if(Plateau_Memori.joueurVainqueur == null)
 			{
 				PreparedStatement pst1 = Connexion.getInstance().prepareStatement(requete);
-				pst1.setInt(1, Plateau_Memori.id_plateau);
-				pst1.setInt(2, Plateau_Memori.getJoueur(0).getId());
+				pst1.setInt(1, Plateau.id_plateau);
+				pst1.setInt(2, Plateau.getJoueur(0).getId());
 				pst1.executeUpdate();
 				
 				PreparedStatement pst2 = Connexion.getInstance().prepareStatement(requete);
-				pst2.setInt(1, Plateau_Memori.id_plateau);
-				pst2.setInt(2, Plateau_Memori.getJoueur(1).getId());
+				pst2.setInt(1, Plateau.id_plateau);
+				pst2.setInt(2, Plateau.getJoueur(1).getId());
 				pst2.executeUpdate();
 			}
 			else
 			{
 				PreparedStatement pst = Connexion.getInstance().prepareStatement(requete);
-				pst.setInt(1, Plateau_Memori.id_plateau);
-				pst.setInt(2, Plateau_Memori.joueurVainqueur.getId());
+				pst.setInt(1, Plateau.id_plateau);
+				pst.setInt(2, Plateau.joueurVainqueur.getId());
 				pst.executeUpdate();
 			}			
 		}
@@ -181,7 +182,7 @@ public class JoueurDAO extends DAO<Joueur>
 	}
 	
 	@Override
-	public Joueur read(int numero) 
+	public Joueur read_Memori(int numero) 
 	{
 		ResultSet rs1 = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN "+TABLE_PAR+" ON "+TABLE_PAR+".fk_id_joueur = joueur.id_joueur "
 				+ "WHERE " + CLE + " = " + numero);
@@ -206,7 +207,7 @@ public class JoueurDAO extends DAO<Joueur>
 			if(rs2.next())
 			{
 				System.out.println(rs2.getInt("fk_id_carte"));
-				joueurLu.setPremiereCarte(gestionCarte.read(rs2.getInt("fk_id_carte")));
+				joueurLu.setPremiereCarte(gestionCarte.read_Memori(rs2.getInt("fk_id_carte")));
 				System.out.println("id joueur : " + numero + " "+joueurLu.getPremiereCarte());
 			}
 		} 
@@ -228,7 +229,7 @@ public class JoueurDAO extends DAO<Joueur>
 		{
 			while(rs.next())
 			{
-				joueurs.add(this.read(rs.getInt("id_joueur")));
+				joueurs.add(this.read_Memori(rs.getInt("id_joueur")));
 			}
 		} 
 		catch (SQLException e) 
@@ -261,7 +262,7 @@ public class JoueurDAO extends DAO<Joueur>
 		boolean succes = true;
 		try 
 		{
-			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM "+TABLE_JC+" WHERE fk_id_plateau = " + Plateau_Memori.id_plateau);
+			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM "+TABLE_JC+" WHERE fk_id_plateau = " + Plateau.id_plateau);
 			pst.executeUpdate();
 			
 		} 

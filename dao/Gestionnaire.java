@@ -5,8 +5,7 @@ import java.util.List;
 import carte.Carte;
 import carte.PaquetCartes;
 import jeu.Joueur;
-import jeu.Plateau_Memori;
-
+import jeu.Plateau;
 
 public class Gestionnaire {
 	private static final CartesDAO gestionnaireCartes = CartesDAO.getInstance();
@@ -23,10 +22,10 @@ public class Gestionnaire {
 		
 		int id_joueur;
 		Joueur joueur_index = null;
-		for (int i = 1; i <= Plateau_Memori.nombreDeJoueurs(); i++) 
+		for (int i = 1; i <= Plateau.nombreDeJoueurs(); i++) 
 		{
-			joueur_index = Plateau_Memori.getJoueur(i);
-			id_joueur = gestionnaireJoueur.isPlayerExistReturnId(Plateau_Memori.getJoueur(i));
+			joueur_index = Plateau.getJoueur(i);
+			id_joueur = gestionnaireJoueur.isPlayerExistReturnId(Plateau.getJoueur(i));
 			
 			if(id_joueur <1)
 				gestionnaireJoueur.create(joueur_index);				
@@ -46,9 +45,9 @@ public class Gestionnaire {
 		{
 			gestionnaireCartes.update(carte);
 		}
-		for (int i = 1; i <= Plateau_Memori.nombreDeJoueurs(); i++) 
+		for (int i = 1; i <= Plateau.nombreDeJoueurs(); i++) 
 		{
-			gestionnaireJoueur.update(Plateau_Memori.getJoueur(i));	
+			gestionnaireJoueur.update(Plateau.getJoueur(i));	
 		}
 		gestionnairePlateau.update_joueur_courant();
 	}
@@ -66,8 +65,8 @@ public class Gestionnaire {
 		int choix_joueur = Joueur.SCANNER.nextInt();
 		int id_partie = Plateau_MemoriDAO.dicoCompteurPlateau.get(choix_joueur);
 		
-		gestionnairePlateau.read(id_partie);
-		gestionnaireCartes.lireCartesDuPlateau(Plateau_Memori.id_plateau);
+		gestionnairePlateau.read_Memori(id_partie);
+		gestionnaireCartes.lireCartesDuPlateau_Memori(Plateau.id_plateau);
 	}
 	
 	

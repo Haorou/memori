@@ -63,6 +63,11 @@ public class Carte {
 		this.estTrouve = bool;
 	}
 
+	public void carteEnleve()
+	{
+		this.affichage = Motif.VIDE;
+	}
+	
 	public void carteRetourneVersMotif() {
 		this.affichage = this.motifCarte;
 	}

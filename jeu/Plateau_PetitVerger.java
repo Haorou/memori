@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import carte.PaquetCartes;
+import carte.motif.Motif_PetitVerger;
 import dao.Gestionnaire;
 import view.consoleView;
 
@@ -49,59 +49,33 @@ public class Plateau_PetitVerger extends Plateau
 	{	
 		afficherPlateau();
 		
-		while(!estVictorieux())
+		while(!joueursSontVictorieux() || !corbeauEstVictorieux())
 		{
 			if(nombreDeJoueurs() > 1)
 				consoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
 
-			//----- CHOIX DE LA PREMIERE CARTE -----// 
-			if(joueurActuel.getPremiereCarte().getPositionIndexPaquet() == -1)
-			{
-				consoleView.afficherMessage("");
-				consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
-				consoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
-				
-				int valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;
-				while(valeurChoix1Joueur < 0 || valeurChoix1Joueur > getPaquetJeuTaille() -1 ||
-						retournerCarte(valeurChoix1Joueur).getEstTrouve())
-				{
-					consoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
-					valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;				
-				}
-				
-				joueurActuel.setPremiereCarte(retournerCarte(valeurChoix1Joueur));
-				updateData();
-				createCartesEnMain();
-			}
-			else
-			{
-				System.out.println(joueurActuel.getPremiereCarte().getPositionIndexPaquet());
-				retournerCarte(joueurActuel.getPremiereCarte().getPositionIndexPaquet());
-			}
-			afficherPlateau();	
-			//----- CHOIX DE LA DEUXIEME CARTE -----//
+			//----- CHOIX CARTE JOUEUR -----// 
 			consoleView.afficherMessage("");
 			consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
-			consoleView.afficherMessage("Veuillez choisir une seconde carte : [1-" + getPaquetJeuTaille() + "]");
+			consoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
 			
-			int valeurChoix2Joueur = Joueur.SCANNER.nextInt() -1;
-
-			while(valeurChoix2Joueur < 0 || valeurChoix2Joueur > getPaquetJeuTaille() -1 ||
-					retournerCarte(valeurChoix2Joueur).getEstTrouve() ||  
-					retournerCarte(valeurChoix2Joueur) == joueurActuel.getPremiereCarte())
+			int valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;
+			while(valeurChoix1Joueur < 0 || valeurChoix1Joueur > getPaquetJeuTaille() -1 ||
+					retournerCarte(valeurChoix1Joueur).getEstTrouve())
 			{
-				consoleView.afficherMessage("Veuillez choisir une autre seconde carte : [1-" + getPaquetJeuTaille() + "]");	
-				valeurChoix2Joueur = Joueur.SCANNER.nextInt() -1;				
+				consoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
+				valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;				
 			}
 			
-			joueurActuel.setSecondeCarte(retournerCarte(valeurChoix2Joueur));
+			joueurActuel.setPremiereCarte(retournerCarte(valeurChoix1Joueur));
 
 			//----- VERIFICATION MEMORI -----//				
 			afficherPlateau();
-			verifierSiDouble();
+			verifierCarte();
+			afficherPlateau();
+
 			
 			joueurActuel.reinitialiserSesCartes();
-			deleteCartesEnMain();
 			
 			if(nombreDeJoueurs() > 1)
 				passerAuJoueurSuivant();
@@ -111,35 +85,63 @@ public class Plateau_PetitVerger extends Plateau
 		afficherMessageVainqueur();
 	}
 
-	private static boolean estVictorieux()
+	private static boolean corbeauEstVictorieux()
 	{
-		int compteurEstTrouve = 0;
-		
-		while(compteurEstTrouve != getPaquetJeuTaille() && PaquetCartes.get(compteurEstTrouve).getEstTrouve())
-			compteurEstTrouve +=1;
-		
-		return compteurEstTrouve == getPaquetJeuTaille();
+		return points_corbeau == POINTS_CORBEAU_A_ATTEINDRE;
 	}
 	
-	private static void verifierSiDouble()
+	private static boolean joueursSontVictorieux()
 	{
-		if(joueurActuel.getPremiereCarte().equals(joueurActuel.getSecondeCarte()))
+		int nombreDePoints = 0;
+		
+		for (Joueur joueur : joueurs) {
+			nombreDePoints += joueur.getNombrePoints();
+		}
+		
+		return nombreDePoints == POINTS_JOUEURS_A_ATTEINDRE;
+	}
+	
+	private static void verifierCarte()
+	{
+		if(joueurActuel.getPremiereCarte().getMotif().equals(Motif_PetitVerger.CERISE))
 		{
 			joueurActuel.getPremiereCarte().setEstTrouve(true);
-			joueurActuel.getSecondeCarte().setEstTrouve(true);
+			joueurActuel.getPremiereCarte().carteEnleve();
 			joueurActuel.ajouterUnPoint();
+		}
+		else if(joueurActuel.getPremiereCarte().getMotif().equals(Motif_PetitVerger.ANIMAL))
+		{
+			joueurActuel.getPremiereCarte().carteRetourneVersDos();
 		}
 		else
 		{
 			joueurActuel.getPremiereCarte().carteRetourneVersDos();
-			joueurActuel.getSecondeCarte().carteRetourneVersDos();
 			joueurActuel.ajouterUneErreur();
+			points_corbeau++;
 		}
 	}
 
 	private static void afficherMessageVainqueur()
 	{
 		List<String> messages = new ArrayList<String>();
+		String noms_des_joueurs = "";
+		
+		for (Joueur joueur : joueurs) {
+			noms_des_joueurs += joueur.getNom() + " ";
+		}
+		
+		if(joueursSontVictorieux())
+		{
+			messages.add("BRAVO " + noms_des_joueurs);
+			messages.add("Vous avez gagnez !");
+			messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
+		}
+		else
+		{
+			messages.add("Malheuresement le corbeau vient de gagner 'Croa croa !'");			
+			messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
+		}
+		
 		if(nombreDeJoueurs() == 1)
 		{
 			joueurVainqueur = joueurActuel;
@@ -157,41 +159,6 @@ public class Plateau_PetitVerger extends Plateau
 				messages.add("Désolé pour " + joueurs.get(1).getNom());
 				messages.add("Vous avez eu moins de points : " + joueurs.get(1).getNombrePoints());
 				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
-			}
-			else if(joueurs.get(1).getNombrePoints() > joueurs.get(0).getNombrePoints())
-			{
-				joueurVainqueur = joueurs.get(1);
-				messages.add("BRAVO " + joueurs.get(1).getNom() + " vous avez gagnez !");
-				messages.add("Vous avez le plus de points : " + joueurs.get(1).getNombrePoints());
-				messages.add("Désolé pour " + joueurs.get(0).getNom());
-				messages.add("Vous avez eu moins de points : " + joueurs.get(0).getNombrePoints());
-				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
-			}
-			else if(joueurs.get(0).getNombrePoints() == joueurs.get(1).getNombrePoints() && 
-					joueurs.get(0).getNombreErreurs() < joueurs.get(1).getNombreErreurs())
-			{
-				joueurVainqueur = joueurs.get(0);
-				messages.add(joueurs.get(0).getNom() + " et " + joueurs.get(1).getNom() + " êtes à égalité en terme de points");
-				messages.add("Mais "+ joueurs.get(0).getNom() + " a moins d'erreurs : " + joueurs.get(0).getNombreErreurs());
-				messages.add("Alors que " + joueurs.get(1).getNom() + " a plus d'erreurs : " + joueurs.get(1).getNombreErreurs());
-				messages.add("Désolé pour " + joueurs.get(1).getNom() + ", " + joueurs.get(0).getNom() +" a gagné ! BRAVO !");
-				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());				
-			}
-			else if(joueurs.get(0).getNombrePoints() == joueurs.get(1).getNombrePoints() && 
-					joueurs.get(1).getNombreErreurs() < joueurs.get(0).getNombreErreurs())
-			{
-				joueurVainqueur = joueurs.get(1);
-				messages.add(joueurs.get(1).getNom() + " et " + joueurs.get(0).getNom() + " êtes à égalité en terme de points");
-				messages.add("Mais "+ joueurs.get(1).getNom() + " a moins d'erreurs : " + joueurs.get(1).getNombreErreurs());
-				messages.add("Alors que " + joueurs.get(0).getNom() + " a plus d'erreurs : " + joueurs.get(0).getNombreErreurs());
-				messages.add("Désolé pour " + joueurs.get(0).getNom() + ", " + joueurs.get(1).getNom() +" a gagné ! BRAVO !");
-				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());		
-			}
-			else
-			{
-				messages.add(joueurs.get(1).getNom() + " et " + joueurs.get(0).getNom() + " êtes à égalité en terme de points");
-				messages.add("Vous êtes également à égalité en terme de nombre d'erreurs (" + joueurs.get(0).getNombreErreurs() + ")");
-				messages.add("Bravo à vous ! C'était malgré tout une belle partie. Elle s'est déroulée en : " +  tempsDeJeu());						
 			}
 		}
 		consoleView.afficherMessages(messages);

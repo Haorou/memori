@@ -34,7 +34,7 @@ public abstract class DAO<T> {
 	 * @param id
 	 * @return T
 	 */
-	public abstract T read(int id);
+	public abstract T read_Memori(int id);
 
 
 

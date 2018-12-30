@@ -209,7 +209,7 @@ public class Plateau_MemoriDAO extends DAO<Plateau_Memori> {
 	}
 
 	@Override
-	public Plateau_Memori read(int id) {
+	public Plateau_Memori read_Memori(int id) {
 		ResultSet rs = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN joueur_courant ON joueur_courant.fk_id_plateau = plateau.id_plateau "
 				+ "WHERE " + CLE + " = " + id);
 		
@@ -221,7 +221,7 @@ public class Plateau_MemoriDAO extends DAO<Plateau_Memori> {
 						rs.getInt("temps_de_jeu"),
 						TransTypeSQL_GregorianCalendar.TimestampToDate(rs.getTimestamp("date_utilisation")),
 						joueurs_db.lireJoueursPlateauCourant(rs.getInt("id_plateau")),
-						joueurs_db.read(rs.getInt("fk_id_joueur")).getNumeroJoueur(),
+						joueurs_db.read_Memori(rs.getInt("fk_id_joueur")).getNumeroJoueur(),
 						rs.getInt("id_plateau")
 						);
 			}

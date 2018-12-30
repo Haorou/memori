@@ -90,7 +90,7 @@ public class CartesDAO extends DAO<Carte> {
 	}
 
 	@Override
-	public Carte read(int id) {
+	public Carte read_Memori(int id) {
 		ResultSet rs = Connexion.executeQuery("SELECT * FROM " + TABLE + " WHERE " + CLE + " =" + id);
 
 		Carte carteLu = null;
@@ -162,7 +162,7 @@ public class CartesDAO extends DAO<Carte> {
 	
 	
 	
-	public boolean lireCartesDuPlateau(int id)
+	public boolean lireCartesDuPlateau_Memori(int id)
 	{
 		boolean succes = true;
 		ResultSet rs = Connexion.executeQuery("SELECT * FROM plateau INNER JOIN carte ON plateau.id_plateau = carte.fk_id_plateau WHERE "
@@ -174,7 +174,7 @@ public class CartesDAO extends DAO<Carte> {
 		{
 			while(rs.next())
 			{	
-				PaquetCartes.add(this.read(rs.getInt("id_carte")));
+				PaquetCartes.add(this.read_Memori(rs.getInt("id_carte")));
 			}
 			PaquetCartes.setSizeTaillePaquet();
 		}
