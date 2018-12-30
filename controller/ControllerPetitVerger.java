@@ -6,6 +6,7 @@ import carte.PaquetCartes;
 import dao.Gestionnaire;
 import jeu.Joueur;
 import jeu.Plateau_Memori;
+import jeu.Plateau_PetitVerger;
 import view.consoleView;
 
 public class ControllerPetitVerger 
@@ -15,9 +16,11 @@ public class ControllerPetitVerger
 	
 	public static void main (String[] args)
 	{
-		consoleView.afficherTitre("Memori");
+		consoleView.afficherTitre("Petit Verger");
 		
 		consoleView.afficherOptions("Parties en cours");
+
+		/*
 		partieDispo = Gestionnaire.listDePartieEnCours();
 		if(partieDispo.isEmpty())
 		{
@@ -26,10 +29,12 @@ public class ControllerPetitVerger
 		}
 		else
 			consoleView.afficherMessages(partieDispo);			
-
+		 */
+		
 		consoleView.afficherMessage("");	
 		consoleView.afficherOptions("Scores");
 		
+		/*
 		scoresDispo = Gestionnaire.listDePartieFinie();
 		if(scoresDispo.isEmpty())
 		{
@@ -56,6 +61,8 @@ public class ControllerPetitVerger
 		{
 			nouvellePartie();
 		}
+		*/
+		nouvellePartie();
 	}
 	
 	private static void reprisePartie()
@@ -73,27 +80,12 @@ public class ControllerPetitVerger
 	private static void nouvellePartie()
 	{
 		consoleView.afficherOptions("Lancement nouvelle parie");
-		PaquetCartes.premierPaquetCartes_Memori(combienDeMotifsEnJeu());
+		PaquetCartes.premierPaquetCartes_PetitVerger();
 		
-		Plateau_Memori.combienCreerDeJoueurs();
+		Plateau_PetitVerger.combienCreerDeJoueurs();
 		
-		Gestionnaire.createDataPartie();
-
-		Plateau_Memori.jouerAuMemori();
+//		Gestionnaire.createDataPartie();
+		
+		Plateau_PetitVerger.jouerAuPetitVerger();
 	}
-	
-	private static int combienDeMotifsEnJeu()
-	{
-		int nombreDeMotifs = 0;
-		
-		while(nombreDeMotifs < 4 || nombreDeMotifs > 10)
-		{
-			consoleView.afficherMessage("");
-			consoleView.afficherMessage("Combien de motifs voulez vous ? [4 à 10]");
-			consoleView.afficherMessage("");
-			nombreDeMotifs = Joueur.SCANNER.nextInt();			
-		}
-		return nombreDeMotifs;
-	}
-
 }

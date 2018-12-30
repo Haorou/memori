@@ -7,14 +7,15 @@ public class Carte {
 	
 	private int id_carte;
 	
-	private final IMotif motifCarte;	
-	private IMotif affichage = Motif.DOS;
+	private final IMotif motifCarte;
+	private IMotif dos = Motif.DOS;
+	private IMotif affichage = this.dos;
 	private boolean estTrouve = false;
 	private int positionIndexPaquet = -1;
 	
 	public Carte()
 	{
-		this.motifCarte = Motif.DOS;
+		this.motifCarte = this.dos;
 	}
 	
 	public Carte(IMotif motif) {
@@ -73,7 +74,13 @@ public class Carte {
 	}
 	
 	public void carteRetourneVersDos() {
-		this.affichage = Motif.DOS;
+		this.affichage = this.dos;
+	}
+	
+	public void setDos(IMotif motif) 	
+	{ 	
+		this.dos = motif; 		
+		carteRetourneVersDos();
 	}
 	
 	public boolean equals(Carte autre)

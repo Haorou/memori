@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import carte.motif.Motif_PetitVerger;
-import dao.Gestionnaire;
 import view.consoleView;
 
 public class Plateau_PetitVerger extends Plateau 
@@ -49,7 +48,7 @@ public class Plateau_PetitVerger extends Plateau
 	{	
 		afficherPlateau();
 		
-		while(!joueursSontVictorieux() || !corbeauEstVictorieux())
+		while(!unParticipantEstGagnant())
 		{
 			if(nombreDeJoueurs() > 1)
 				consoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
@@ -80,7 +79,7 @@ public class Plateau_PetitVerger extends Plateau
 			if(nombreDeJoueurs() > 1)
 				passerAuJoueurSuivant();
 			
-			updateData();
+//			updateData();
 		}
 		afficherMessageVainqueur();
 	}
@@ -101,24 +100,37 @@ public class Plateau_PetitVerger extends Plateau
 		return nombreDePoints == POINTS_JOUEURS_A_ATTEINDRE;
 	}
 	
+	public static boolean unParticipantEstGagnant()
+	{
+		return joueursSontVictorieux()?true:corbeauEstVictorieux();
+	}
+	
 	private static void verifierCarte()
 	{
+		String message = "";
 		if(joueurActuel.getPremiereCarte().getMotif().equals(Motif_PetitVerger.CERISE))
 		{
 			joueurActuel.getPremiereCarte().setEstTrouve(true);
 			joueurActuel.getPremiereCarte().carteEnleve();
 			joueurActuel.ajouterUnPoint();
+			message = joueurActuel.getNom() + " à trouvé une cerise ! Super !";
 		}
 		else if(joueurActuel.getPremiereCarte().getMotif().equals(Motif_PetitVerger.ANIMAL))
 		{
 			joueurActuel.getPremiereCarte().carteRetourneVersDos();
+			message = joueurActuel.getNom() + " à trouvé un animal. Une papouille et on le laisse dormir";
 		}
 		else
 		{
 			joueurActuel.getPremiereCarte().carteRetourneVersDos();
 			joueurActuel.ajouterUneErreur();
 			points_corbeau++;
+			message = joueurActuel.getNom() + " à trouvé un corbeau ! :o Il s'approche du cerisier !";
 		}
+
+		consoleView.afficherMessage("");
+		consoleView.afficherMessage(message);
+		consoleView.afficherMessage("");
 	}
 
 	private static void afficherMessageVainqueur()
@@ -130,41 +142,24 @@ public class Plateau_PetitVerger extends Plateau
 			noms_des_joueurs += joueur.getNom() + " ";
 		}
 		
+		messages.add("");
+		
 		if(joueursSontVictorieux())
 		{
 			messages.add("BRAVO " + noms_des_joueurs);
 			messages.add("Vous avez gagnez !");
-			messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
 		}
 		else
 		{
-			messages.add("Malheuresement le corbeau vient de gagner 'Croa croa !'");			
-			messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
+			messages.add("Malheuresement le corbeau vient de gagner 'Croa croa !'");
 		}
 		
-		if(nombreDeJoueurs() == 1)
-		{
-			joueurVainqueur = joueurActuel;
-			messages.add("BRAVO " + joueurActuel.getNom() + " vous avez gagnez !");
-			messages.add("Vous avez eu " + joueurActuel.getNombreErreurs() + " erreur(s) en " + tempsDeJeu());			
-		}
-		else
-		{
-
-			if(joueurs.get(0).getNombrePoints() > joueurs.get(1).getNombrePoints())
-			{
-				joueurVainqueur = joueurs.get(0);
-				messages.add("BRAVO " + joueurs.get(0).getNom() + " vous avez gagnez !");
-				messages.add("Vous avez le plus de points : " + joueurs.get(0).getNombrePoints());
-				messages.add("Désolé pour " + joueurs.get(1).getNom());
-				messages.add("Vous avez eu moins de points : " + joueurs.get(1).getNombrePoints());
-				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
-			}
-		}
+		messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
+		
 		consoleView.afficherMessages(messages);
 		
-		Gestionnaire.enregistrerVainqueur();
-		Gestionnaire.supprimerCartesDuPaquet();
-		Gestionnaire.supprimerJoueurCourant();
+//		Gestionnaire.enregistrerVainqueur();
+//		Gestionnaire.supprimerCartesDuPaquet();
+//		Gestionnaire.supprimerJoueurCourant();
 	}
 }

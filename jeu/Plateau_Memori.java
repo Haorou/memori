@@ -135,11 +135,13 @@ public class Plateau_Memori extends Plateau
 	private static void afficherMessageVainqueur()
 	{
 		List<String> messages = new ArrayList<String>();
+		messages.add("");
+		
 		if(nombreDeJoueurs() == 1)
 		{
 			joueurVainqueur = joueurActuel;
 			messages.add("BRAVO " + joueurActuel.getNom() + " vous avez gagnez !");
-			messages.add("Vous avez eu " + joueurActuel.getNombreErreurs() + " erreur(s) en " + tempsDeJeu());			
+			messages.add("Vous avez eu " + joueurActuel.getNombreErreurs() + " erreur(s)");			
 		}
 		else
 		{
@@ -151,7 +153,6 @@ public class Plateau_Memori extends Plateau
 				messages.add("Vous avez le plus de points : " + joueurs.get(0).getNombrePoints());
 				messages.add("Désolé pour " + joueurs.get(1).getNom());
 				messages.add("Vous avez eu moins de points : " + joueurs.get(1).getNombrePoints());
-				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
 			}
 			else if(joueurs.get(1).getNombrePoints() > joueurs.get(0).getNombrePoints())
 			{
@@ -160,7 +161,6 @@ public class Plateau_Memori extends Plateau
 				messages.add("Vous avez le plus de points : " + joueurs.get(1).getNombrePoints());
 				messages.add("Désolé pour " + joueurs.get(0).getNom());
 				messages.add("Vous avez eu moins de points : " + joueurs.get(0).getNombrePoints());
-				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
 			}
 			else if(joueurs.get(0).getNombrePoints() == joueurs.get(1).getNombrePoints() && 
 					joueurs.get(0).getNombreErreurs() < joueurs.get(1).getNombreErreurs())
@@ -169,8 +169,7 @@ public class Plateau_Memori extends Plateau
 				messages.add(joueurs.get(0).getNom() + " et " + joueurs.get(1).getNom() + " êtes à égalité en terme de points");
 				messages.add("Mais "+ joueurs.get(0).getNom() + " a moins d'erreurs : " + joueurs.get(0).getNombreErreurs());
 				messages.add("Alors que " + joueurs.get(1).getNom() + " a plus d'erreurs : " + joueurs.get(1).getNombreErreurs());
-				messages.add("Désolé pour " + joueurs.get(1).getNom() + ", " + joueurs.get(0).getNom() +" a gagné ! BRAVO !");
-				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());				
+				messages.add("Désolé pour " + joueurs.get(1).getNom() + ", " + joueurs.get(0).getNom() +" a gagné ! BRAVO !");		
 			}
 			else if(joueurs.get(0).getNombrePoints() == joueurs.get(1).getNombrePoints() && 
 					joueurs.get(1).getNombreErreurs() < joueurs.get(0).getNombreErreurs())
@@ -180,14 +179,14 @@ public class Plateau_Memori extends Plateau
 				messages.add("Mais "+ joueurs.get(1).getNom() + " a moins d'erreurs : " + joueurs.get(1).getNombreErreurs());
 				messages.add("Alors que " + joueurs.get(0).getNom() + " a plus d'erreurs : " + joueurs.get(0).getNombreErreurs());
 				messages.add("Désolé pour " + joueurs.get(0).getNom() + ", " + joueurs.get(1).getNom() +" a gagné ! BRAVO !");
-				messages.add("La partie s'est déroulée en : " +  tempsDeJeu());		
 			}
 			else
 			{
 				messages.add(joueurs.get(1).getNom() + " et " + joueurs.get(0).getNom() + " êtes à égalité en terme de points");
 				messages.add("Vous êtes également à égalité en terme de nombre d'erreurs (" + joueurs.get(0).getNombreErreurs() + ")");
-				messages.add("Bravo à vous ! C'était malgré tout une belle partie. Elle s'est déroulée en : " +  tempsDeJeu());						
+				messages.add("Bravo à vous ! C'était malgré tout une belle partie.");						
 			}
+			messages.add("La partie s'est déroulée en : " +  tempsDeJeu());		
 		}
 		consoleView.afficherMessages(messages);
 		
