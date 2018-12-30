@@ -1,14 +1,14 @@
-package jeu.petit_verger;
+package controller;
 
 import java.util.List;
 
 import carte.PaquetCartes;
 import dao.Gestionnaire;
 import jeu.Joueur;
-import jeu.memori.Plateau_Memori;
+import jeu.Plateau_Memori;
 import view.consoleView;
 
-public class Petit_Verger 
+public class ControllerPetitVerger 
 {
 	private static List<String> partieDispo;
 	private static List<String> scoresDispo;

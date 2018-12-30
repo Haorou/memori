@@ -8,7 +8,7 @@ import java.sql.Statement;
 import carte.Carte;
 import carte.PaquetCartes;
 import carte.motif.Motif_Memori;
-import jeu.memori.Plateau_Memori;
+import jeu.Plateau_Memori;
 
 public class CartesDAO extends DAO<Carte> {
 	private static final String TABLE = "carte";

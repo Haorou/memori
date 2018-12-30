@@ -1,13 +1,14 @@
-package jeu.memori;
+package controller;
 
 import java.util.List;
 
 import carte.PaquetCartes;
 import dao.Gestionnaire;
 import jeu.Joueur;
+import jeu.Plateau_Memori;
 import view.consoleView;
 
-public class Memori 
+public class ControllerMemori 
 {
 	private static List<String> partieDispo;
 	private static List<String> scoresDispo;

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jeu.memori.Plateau_Memori;
+import jeu.Plateau_Memori;
 
 public class Plateau_MemoriDAO extends DAO<Plateau_Memori> {
 	private static final String TABLE = "plateau";

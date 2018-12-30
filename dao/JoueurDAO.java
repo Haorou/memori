@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jeu.Joueur;
-import jeu.memori.Plateau_Memori;
+import jeu.Plateau_Memori;
 
 public class JoueurDAO extends DAO<Joueur> 
 {

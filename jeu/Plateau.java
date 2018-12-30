@@ -1,4 +1,4 @@
-package jeu.petit_verger;
+package jeu;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,15 +7,15 @@ import java.util.concurrent.TimeUnit;
 
 import carte.Carte;
 import carte.PaquetCartes;
-import carte.motif.Motif_Memori;
+import carte.motif.IMotif;
+import carte.motif.Motif;
 import dao.Gestionnaire;
-import jeu.Joueur;
 import view.consoleView;
 
-public class Plateau_Petit_Verger {
+public class Plateau {
 	public static int id_plateau;
 	
-	private static long tempsDeJeuMillisDB;
+	protected static long tempsDeJeuMillisDB;
 	public static Date date_nouvelle_utilisation = new Date();
 	public static Date date_derniere_utilisationDB;
 	public static long tempsDeJeuMillis;
@@ -24,7 +24,7 @@ public class Plateau_Petit_Verger {
 	public static Joueur joueurActuel;
 	public static Joueur joueurVainqueur = null;
 
-	public Plateau_Petit_Verger(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB, int id_plateauDB)
+	public Plateau(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB, int id_plateauDB)
 	{
 		date_derniere_utilisationDB = date_derniere_utilisation;
 		tempsDeJeuMillisDB = tempsDeJeuMillis;
@@ -36,7 +36,7 @@ public class Plateau_Petit_Verger {
 		id_plateau = id_plateauDB;
 	}
 	
-	public Plateau_Petit_Verger(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB)
+	public Plateau(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB)
 	{
 		date_derniere_utilisationDB = date_derniere_utilisation;
 		tempsDeJeuMillisDB = tempsDeJeuMillis;
@@ -173,7 +173,7 @@ public class Plateau_Petit_Verger {
 		return compteurEstTrouve == getPaquetJeuTaille();
 	}
 	
-	private static String tempsDeJeu()
+	protected static String tempsDeJeu()
 	{
 		tempsDeJeuMillis = ( new Date().getTime() - date_nouvelle_utilisation.getTime() ) + tempsDeJeuMillisDB;
 		long minutes = TimeUnit.MILLISECONDS.toMinutes(tempsDeJeuMillis);
@@ -181,7 +181,7 @@ public class Plateau_Petit_Verger {
 		return minutes + " minutes " + seconds + " secondes.";
 	}
 	
-	private static Carte retournerCarte(int indice)
+	protected static Carte retournerCarte(int indice)
 	{
 		PaquetCartes.get(indice).carteRetourneVersMotif();
 		
@@ -204,7 +204,7 @@ public class Plateau_Petit_Verger {
 		}
 	}
 	
-	private static void passerAuJoueurSuivant()
+	protected static void passerAuJoueurSuivant()
 	{
 		switch(joueurs.indexOf(joueurActuel))
 		{
@@ -217,7 +217,7 @@ public class Plateau_Petit_Verger {
 	}
 			
 	//----------------GERER AFFICHAGE PLATEAU----------------//
-	private static void afficherPlateau()
+	protected static void afficherPlateau()
 	{	
 		List<String> affichagePlateau = new ArrayList<String>();
 		int tourDeBoucle;
@@ -267,9 +267,9 @@ public class Plateau_Petit_Verger {
 		return template;
 	}
 	
-	private static Motif_Memori afficherCarte(int indice)
+	private static IMotif afficherCarte(int indice)
 	{
-		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif_Memori.VIDE;
+		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif.VIDE;
 	}
 	
 	private static void afficherMessageVainqueur()
@@ -337,17 +337,17 @@ public class Plateau_Petit_Verger {
 	}
 
 	//----------------GERER SAUVEGARDE BD----------------//
-	private static void updateData()
+	protected static void updateData()
 	{
 		Gestionnaire.updateDataPartie();
 	}
 	
-	private static void createCartesEnMain()
+	protected static void createCartesEnMain()
 	{
 		Gestionnaire.createCartesEnMain();
 	}
 	
-	private static void deleteCartesEnMain()
+	protected static void deleteCartesEnMain()
 	{
 		Gestionnaire.deleteCartesEnMain();
 	}

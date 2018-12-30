@@ -5,7 +5,7 @@ import java.util.List;
 import carte.Carte;
 import carte.PaquetCartes;
 import jeu.Joueur;
-import jeu.memori.Plateau_Memori;
+import jeu.Plateau_Memori;
 
 
 public class Gestionnaire {
