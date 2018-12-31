@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import carte.PaquetCartes;
+import carte.motif.IMotif;
+import carte.motif.Motif;
 import carte.motif.Motif_PetitVerger;
 import view.consoleView;
 
 public class Plateau_PetitVerger extends Plateau 
 {
-	final static int POINTS_JOUEURS_A_ATTEINDRE = 5;
-	final static int POINTS_CORBEAU_A_ATTEINDRE = 6;
-	static int points_corbeau = 0;
+	public final String JEU = "PetitVerger";
+	
+	final int POINTS_JOUEURS_A_ATTEINDRE = 5;
+	final int POINTS_CORBEAU_A_ATTEINDRE = 6;
+	private int points_corbeau = 0;
+	private IMotif de = Motif.VIDE;
 	
 	public Plateau_PetitVerger(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB,
 			int indexDB) {
@@ -25,8 +31,12 @@ public class Plateau_PetitVerger extends Plateau
 		// TODO Auto-generated constructor stub
 	}
 
+	public Plateau_PetitVerger() {
+		super();
+	}
+
 	//------------------GESTION JEU MEMORI------------------//	
-	public static void combienCreerDeJoueurs() 
+	public void combienCreerDeJoueurs() 
 	{
 		int reponse = 0;
 		while(reponse < 1 || reponse >4)
@@ -44,7 +54,67 @@ public class Plateau_PetitVerger extends Plateau
 		joueurActuel = joueurs.get(0);
 	}
 	
-	public static void jouerAuPetitVerger()
+	public void lancerDe()
+	{
+		int valeur = 1 + (int) (Math.random() * 6);
+		
+		switch(valeur)
+		{
+		case 1:
+			de = Motif_PetitVerger.BLEU;
+			break;
+		case 2:
+			de = Motif_PetitVerger.JAUNE;
+			break;
+		case 3:
+			de = Motif_PetitVerger.ROUGE;
+			break;
+		case 4:
+			de = Motif_PetitVerger.VERT;
+			break;
+		case 5:
+			de = Motif_PetitVerger.VIOLET;
+			break;
+		case 6:
+			de = Motif_PetitVerger.SOLEIL;	
+		}
+		
+		boolean estCompatible = false;
+		
+		for(int indice = 0 ; indice < PaquetCartes.getTaillePaquet() ; indice++)
+		{
+			if(PaquetCartes.paquetCartes.get(indice).getDos().equals(de))
+			{
+				estCompatible = true;
+			}
+		}
+		
+		if(estCompatible)
+		{
+			consoleView.afficherMessage("");
+			consoleView.afficherMessage("Vous venez de lancer le dé");
+			consoleView.afficherMessage("Le motif du dé est le suivant : " + de);			
+			consoleView.afficherMessage("");			
+		}
+		else
+		{
+			lancerDe();
+		}
+
+	}
+	
+	public boolean checkDeDosMotif(int valeurChoixJoueur)
+	{
+		IMotif dosDeCarte = PaquetCartes.get(valeurChoixJoueur).getDos();
+		boolean estCompatible = dosDeCarte.equals(de);
+		
+		if(de.equals(Motif_PetitVerger.SOLEIL))
+			estCompatible = true;
+		
+		return estCompatible;
+	}
+	
+	public void jouer()
 	{	
 		afficherPlateau();
 		
@@ -53,6 +123,7 @@ public class Plateau_PetitVerger extends Plateau
 			if(nombreDeJoueurs() > 1)
 				consoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
 
+			lancerDe();
 			//----- CHOIX CARTE JOUEUR -----// 
 			consoleView.afficherMessage("");
 			consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
@@ -60,7 +131,7 @@ public class Plateau_PetitVerger extends Plateau
 			
 			int valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;
 			while(valeurChoix1Joueur < 0 || valeurChoix1Joueur > getPaquetJeuTaille() -1 ||
-					retournerCarte(valeurChoix1Joueur).getEstTrouve())
+					retournerCarte(valeurChoix1Joueur).getEstTrouve()  || !checkDeDosMotif(valeurChoix1Joueur))
 			{
 				consoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
 				valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;				
@@ -84,12 +155,12 @@ public class Plateau_PetitVerger extends Plateau
 		afficherMessageVainqueur();
 	}
 
-	private static boolean corbeauEstVictorieux()
+	private boolean corbeauEstVictorieux()
 	{
 		return points_corbeau == POINTS_CORBEAU_A_ATTEINDRE;
 	}
 	
-	private static boolean joueursSontVictorieux()
+	private boolean joueursSontVictorieux()
 	{
 		int nombreDePoints = 0;
 		
@@ -100,12 +171,12 @@ public class Plateau_PetitVerger extends Plateau
 		return nombreDePoints == POINTS_JOUEURS_A_ATTEINDRE;
 	}
 	
-	public static boolean unParticipantEstGagnant()
+	public boolean unParticipantEstGagnant()
 	{
 		return joueursSontVictorieux()?true:corbeauEstVictorieux();
 	}
 	
-	private static void verifierCarte()
+	private void verifierCarte()
 	{
 		String message = "";
 		if(joueurActuel.getPremiereCarte().getMotif().equals(Motif_PetitVerger.CERISE))
@@ -133,7 +204,7 @@ public class Plateau_PetitVerger extends Plateau
 		consoleView.afficherMessage("");
 	}
 
-	private static void afficherMessageVainqueur()
+	private void afficherMessageVainqueur()
 	{
 		List<String> messages = new ArrayList<String>();
 		String noms_des_joueurs = "";
@@ -161,5 +232,11 @@ public class Plateau_PetitVerger extends Plateau
 //		Gestionnaire.enregistrerVainqueur();
 //		Gestionnaire.supprimerCartesDuPaquet();
 //		Gestionnaire.supprimerJoueurCourant();
+	}
+
+	@Override
+	public String getJeu() {
+		// TODO Auto-generated method stub
+		return JEU;
 	}
 }

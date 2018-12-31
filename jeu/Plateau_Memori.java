@@ -10,6 +10,8 @@ import view.consoleView;
 
 public class Plateau_Memori extends Plateau
 {
+	public final String JEU = "Memori";
+	
 	public Plateau_Memori(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB) {
 		super(tempsDeJeuMillis, date_derniere_utilisation, joueursDB, indexDB);
 	}
@@ -19,8 +21,12 @@ public class Plateau_Memori extends Plateau
 		super(tempsDeJeuMillis, date_derniere_utilisation, joueursDB, indexDB, id_plateauDB);
 	}
 
+	public Plateau_Memori() {
+		super();
+	}
+
 	//------------------GESTION JEU MEMORI------------------//	
-	public static void combienCreerDeJoueurs() 
+	public void combienCreerDeJoueurs() 
 	{
 		int reponse = 0;
 		while(reponse < 1 || reponse >2)
@@ -38,7 +44,7 @@ public class Plateau_Memori extends Plateau
 		joueurActuel = joueurs.get(0);
 	}
 	
-	public static void jouerAuMemori()
+	public void jouer()
 	{	
 		afficherPlateau();
 		
@@ -104,7 +110,7 @@ public class Plateau_Memori extends Plateau
 		afficherMessageVainqueur();
 	}
 
-	private static boolean estVictorieux()
+	private boolean estVictorieux()
 	{
 		int compteurEstTrouve = 0;
 		
@@ -114,7 +120,7 @@ public class Plateau_Memori extends Plateau
 		return compteurEstTrouve == getPaquetJeuTaille();
 	}
 
-	private static void verifierSiDouble()
+	private void verifierSiDouble()
 	{
 		if(joueurActuel.getPremiereCarte().equals(joueurActuel.getSecondeCarte()))
 		{
@@ -132,7 +138,7 @@ public class Plateau_Memori extends Plateau
 			
 	//----------------GERER AFFICHAGE PLATEAU----------------//
 	
-	private static void afficherMessageVainqueur()
+	private void afficherMessageVainqueur()
 	{
 		List<String> messages = new ArrayList<String>();
 		messages.add("");
@@ -193,5 +199,11 @@ public class Plateau_Memori extends Plateau
 		Gestionnaire.enregistrerVainqueur();
 		Gestionnaire.supprimerCartesDuPaquet();
 		Gestionnaire.supprimerJoueurCourant();
+	}
+
+	@Override
+	public String getJeu() {
+		// TODO Auto-generated method stub
+		return JEU;
 	}
 }

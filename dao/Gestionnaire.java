@@ -60,13 +60,13 @@ public class Gestionnaire {
 	}
 	
 	
-	public static void preparerCartesJoueursEtPlateau()
+	public static Plateau preparerCartesJoueursEtPlateau()
 	{
 		int choix_joueur = Joueur.SCANNER.nextInt();
-		int id_partie = Plateau_MemoriDAO.dicoCompteurPlateau.get(choix_joueur);
+		int id_partie = PlateauDAO.dicoCompteurPlateau.get(choix_joueur);
 		
-		gestionnairePlateau.read_Memori(id_partie);
-		gestionnaireCartes.lireCartesDuPlateau_Memori(Plateau.id_plateau);
+		gestionnaireCartes.lireCartesDuPlateau(id_partie);
+		return gestionnairePlateau.read(id_partie);
 	}
 	
 	

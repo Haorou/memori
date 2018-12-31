@@ -4,8 +4,7 @@ import java.util.List;
 
 import carte.PaquetCartes;
 import dao.Gestionnaire;
-import jeu.Joueur;
-import jeu.Plateau_Memori;
+import jeu.Plateau;
 import jeu.Plateau_PetitVerger;
 import view.consoleView;
 
@@ -13,6 +12,7 @@ public class ControllerPetitVerger
 {
 	private static List<String> partieDispo;
 	private static List<String> scoresDispo;
+	private static Plateau plateauDeJeu;
 	
 	public static void main (String[] args)
 	{
@@ -72,20 +72,23 @@ public class ControllerPetitVerger
 		consoleView.afficherMessage("Quelle partie voulez vous reprendre ? [n°]");
 		consoleView.afficherMessage("");
 		
-		Gestionnaire.preparerCartesJoueursEtPlateau();
+		plateauDeJeu = Gestionnaire.preparerCartesJoueursEtPlateau();
 
-		Plateau_Memori.jouerAuMemori();
+		plateauDeJeu.jouer();
 	}
 	
 	private static void nouvellePartie()
 	{
 		consoleView.afficherOptions("Lancement nouvelle parie");
+	
+		plateauDeJeu = new Plateau_PetitVerger();
+		
 		PaquetCartes.premierPaquetCartes_PetitVerger();
 		
-		Plateau_PetitVerger.combienCreerDeJoueurs();
+		plateauDeJeu.combienCreerDeJoueurs();
 		
-//		Gestionnaire.createDataPartie();
+//		Gestionnaire.createDataPartie();	
+		plateauDeJeu.jouer();
 		
-		Plateau_PetitVerger.jouerAuPetitVerger();
 	}
 }

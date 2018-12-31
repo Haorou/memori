@@ -8,7 +8,7 @@ import java.sql.Statement;
 import carte.Carte;
 import carte.PaquetCartes;
 import carte.motif.Motif_Memori;
-import jeu.Plateau_Memori;
+import jeu.Plateau;
 
 public class CartesDAO extends DAO<Carte> {
 	private static final String TABLE = "carte";
@@ -34,7 +34,7 @@ public class CartesDAO extends DAO<Carte> {
 			pst.setInt(1, (obj.getMotif()).ordinal());
 			pst.setInt(2, obj.getEstTrouve()?1:0);
 			pst.setInt(3, obj.getPositionIndexPaquet() == -1 ? null:obj.getPositionIndexPaquet());
-			pst.setInt(4, Plateau_Memori.id_plateau);
+			pst.setInt(4, Plateau.id_plateau);
 			pst.executeUpdate();
 			
 			ResultSet rs = pst.getGeneratedKeys();
@@ -90,7 +90,7 @@ public class CartesDAO extends DAO<Carte> {
 	}
 
 	@Override
-	public Carte read_Memori(int id) {
+	public Carte read(int id) {
 		ResultSet rs = Connexion.executeQuery("SELECT * FROM " + TABLE + " WHERE " + CLE + " =" + id);
 
 		Carte carteLu = null;
@@ -127,8 +127,8 @@ public class CartesDAO extends DAO<Carte> {
 					.prepareStatement("INSERT INTO cartes_en_main(fk_id_carte, fk_id_joueur) "
 							+ "VALUES(?,?)");
 
-			pst.setInt(1, Plateau_Memori.joueurActuel.getPremiereCarte().getId());
-			pst.setInt(2, Plateau_Memori.joueurActuel.getId());
+			pst.setInt(1, Plateau.joueurActuel.getPremiereCarte().getId());
+			pst.setInt(2, Plateau.joueurActuel.getId());
 			pst.executeUpdate();
 		} 
 		catch (SQLException e) 
@@ -147,7 +147,7 @@ public class CartesDAO extends DAO<Carte> {
 			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM cartes_en_main WHERE "
 					+ "fk_id_joueur = ?");
 
-			pst.setInt(1, Plateau_Memori.joueurActuel.getId());
+			pst.setInt(1, Plateau.joueurActuel.getId());
 			pst.executeUpdate();
 			
 		} 
@@ -162,7 +162,7 @@ public class CartesDAO extends DAO<Carte> {
 	
 	
 	
-	public boolean lireCartesDuPlateau_Memori(int id)
+	public boolean lireCartesDuPlateau(int id)
 	{
 		boolean succes = true;
 		ResultSet rs = Connexion.executeQuery("SELECT * FROM plateau INNER JOIN carte ON plateau.id_plateau = carte.fk_id_plateau WHERE "
@@ -174,7 +174,7 @@ public class CartesDAO extends DAO<Carte> {
 		{
 			while(rs.next())
 			{	
-				PaquetCartes.add(this.read_Memori(rs.getInt("id_carte")));
+				PaquetCartes.add(this.read(rs.getInt("id_carte")));
 			}
 			PaquetCartes.setSizeTaillePaquet();
 		}
@@ -209,7 +209,7 @@ public class CartesDAO extends DAO<Carte> {
 		boolean succes = true;
 		try 
 		{
-			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM " + TABLE + " WHERE fk_id_plateau = " + Plateau_Memori.id_plateau);
+			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM " + TABLE + " WHERE fk_id_plateau = " + Plateau.id_plateau);
 			pst.executeUpdate();
 			
 		} 

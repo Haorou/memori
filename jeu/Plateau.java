@@ -12,18 +12,21 @@ import carte.motif.Motif;
 import dao.Gestionnaire;
 import view.consoleView;
 
-public class Plateau {
+public abstract class Plateau 
+{
 	public static int id_plateau;
 	
-	protected static long tempsDeJeuMillisDB;
+	protected long tempsDeJeuMillisDB;
 	public static Date date_nouvelle_utilisation = new Date();
-	public static Date date_derniere_utilisationDB;
+	public Date date_derniere_utilisationDB;
 	public static long tempsDeJeuMillis;
 	
 	public static List<Joueur> joueurs = new ArrayList<Joueur>();
 	public static Joueur joueurActuel;
 	public static Joueur joueurVainqueur = null;
 
+	public Plateau() {}
+	
 	public Plateau(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB, int id_plateauDB)
 	{
 		date_derniere_utilisationDB = date_derniere_utilisation;
@@ -46,7 +49,7 @@ public class Plateau {
 		joueurActuel = getJoueur(indexDB);
 	}
 
-	public static String getDate()
+	public String getDate()
 	{
 		@SuppressWarnings("deprecation")
 		String message = "Du " + date_derniere_utilisationDB.getDate() + "/" +
@@ -61,7 +64,7 @@ public class Plateau {
 		return joueurs.get(index - 1);
 	}
 
-	public static int getPaquetJeuTaille()
+	public int getPaquetJeuTaille()
 	{
 		return PaquetCartes.getTaillePaquet();
 	}
@@ -72,32 +75,7 @@ public class Plateau {
 	}
 
 	//------------------GESTION JEU MEMORI------------------//	
-	public static void combienCreerDeJoueurs() 
-	{
-		int reponse = 0;
-		while(reponse < 1 || reponse >2)
-		{
-			consoleView.afficherMessage("");
-			consoleView.afficherMessage("Souhaitez vous jouer seul ou à deux ? [1-2]");
-			consoleView.afficherMessage("");
-			reponse = Joueur.SCANNER.nextInt();
-		}
-
-		switch(reponse)
-		{
-		case 1:
-			joueurs = new ArrayList<Joueur>(1);
-			joueurs.add(new Joueur());
-			break;
-		case 2:
-			joueurs = new ArrayList<Joueur>(2);
-			joueurs.add(new Joueur());
-			joueurs.add(new Joueur());
-		}
-		joueurActuel = joueurs.get(0);
-	}
-	
-	protected static String tempsDeJeu()
+	protected String tempsDeJeu()
 	{
 		tempsDeJeuMillis = ( new Date().getTime() - date_nouvelle_utilisation.getTime() ) + tempsDeJeuMillisDB;
 		long minutes = TimeUnit.MILLISECONDS.toMinutes(tempsDeJeuMillis);
@@ -105,14 +83,14 @@ public class Plateau {
 		return minutes + " minutes " + seconds + " secondes.";
 	}
 	
-	protected static Carte retournerCarte(int indice)
+	protected Carte retournerCarte(int indice)
 	{
 		PaquetCartes.get(indice).carteRetourneVersMotif();
 		
 		return PaquetCartes.get(indice);
 	}
 	
-	protected static void passerAuJoueurSuivant()
+	protected void passerAuJoueurSuivant()
 	{
 		int indexJoueurCourant = joueurs.indexOf(joueurActuel);
 		int nombreDeJoueur = joueurs.size();
@@ -125,7 +103,7 @@ public class Plateau {
 	}
 			
 	//----------------GERER AFFICHAGE PLATEAU----------------//
-	protected static void afficherPlateau()
+	protected void afficherPlateau()
 	{	
 		List<String> affichagePlateau = new ArrayList<String>();
 		int tourDeBoucle;
@@ -142,7 +120,7 @@ public class Plateau {
 		consoleView.afficherMessages(affichagePlateau);
 	}
 
-	private static String lignePlateau(int tourDeboucle, int tourDeBoucleIntra, int numeroTemplate)
+	private String lignePlateau(int tourDeboucle, int tourDeBoucleIntra, int numeroTemplate)
 	{
 		String ligne = "";
 
@@ -152,7 +130,7 @@ public class Plateau {
 		return ligne;
 	}
 	
-	private static String retournerTemplate(int numeroTemplate, int tourDeBoucleIntra)
+	private String retournerTemplate(int numeroTemplate, int tourDeBoucleIntra)
 	{
 		String template = "";
 		switch(numeroTemplate)
@@ -175,24 +153,30 @@ public class Plateau {
 		return template;
 	}
 	
-	private static IMotif afficherCarte(int indice)
+	private IMotif afficherCarte(int indice)
 	{
 		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif.VIDE;
 	}
 
 	//----------------GERER SAUVEGARDE BD----------------//
-	protected static void updateData()
+	protected void updateData()
 	{
 		Gestionnaire.updateDataPartie();
 	}
 	
-	protected static void createCartesEnMain()
+	protected void createCartesEnMain()
 	{
 		Gestionnaire.createCartesEnMain();
 	}
 	
-	protected static void deleteCartesEnMain()
+	protected void deleteCartesEnMain()
 	{
 		Gestionnaire.deleteCartesEnMain();
 	}
+
+	public abstract void combienCreerDeJoueurs();
+
+	public abstract void jouer();
+	
+	public abstract String getJeu();	
 }

@@ -5,13 +5,16 @@ import java.util.List;
 import carte.PaquetCartes;
 import dao.Gestionnaire;
 import jeu.Joueur;
+import jeu.Plateau;
 import jeu.Plateau_Memori;
+import jeu.Plateau_PetitVerger;
 import view.consoleView;
 
 public class ControllerMemori 
 {
 	private static List<String> partieDispo;
 	private static List<String> scoresDispo;
+	private static Plateau plateauDeJeu;
 	
 	public static void main (String[] args)
 	{
@@ -65,21 +68,23 @@ public class ControllerMemori
 		consoleView.afficherMessage("Quelle partie voulez vous reprendre ? [n°]");
 		consoleView.afficherMessage("");
 		
-		Gestionnaire.preparerCartesJoueursEtPlateau();
+		plateauDeJeu = Gestionnaire.preparerCartesJoueursEtPlateau();
 
-		Plateau_Memori.jouerAuMemori();
+		plateauDeJeu.jouer();
 	}
 	
 	private static void nouvellePartie()
 	{
 		consoleView.afficherOptions("Lancement nouvelle parie");
+		
+		plateauDeJeu = new Plateau_Memori();
 		PaquetCartes.premierPaquetCartes_Memori(combienDeMotifsEnJeu());
 		
-		Plateau_Memori.combienCreerDeJoueurs();
+		plateauDeJeu.combienCreerDeJoueurs();
 		
 		Gestionnaire.createDataPartie();
 
-		Plateau_Memori.jouerAuMemori();
+		plateauDeJeu.jouer();
 	}
 	
 	private static int combienDeMotifsEnJeu()

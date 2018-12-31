@@ -9,7 +9,6 @@ import java.util.List;
 
 import jeu.Joueur;
 import jeu.Plateau;
-import jeu.Plateau_Memori;
 
 public class JoueurDAO extends DAO<Joueur> 
 {
@@ -152,7 +151,7 @@ public class JoueurDAO extends DAO<Joueur>
 		boolean succes = true;
 		String requete = "INSERT INTO gagnee (fk_id_plateau, fk_id_joueur) VALUES(?,?)";
 		try {
-			if(Plateau_Memori.joueurVainqueur == null)
+			if(Plateau.joueurVainqueur == null)
 			{
 				PreparedStatement pst1 = Connexion.getInstance().prepareStatement(requete);
 				pst1.setInt(1, Plateau.id_plateau);
@@ -182,7 +181,7 @@ public class JoueurDAO extends DAO<Joueur>
 	}
 	
 	@Override
-	public Joueur read_Memori(int numero) 
+	public Joueur read(int numero) 
 	{
 		ResultSet rs1 = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN "+TABLE_PAR+" ON "+TABLE_PAR+".fk_id_joueur = joueur.id_joueur "
 				+ "WHERE " + CLE + " = " + numero);
@@ -207,7 +206,7 @@ public class JoueurDAO extends DAO<Joueur>
 			if(rs2.next())
 			{
 				System.out.println(rs2.getInt("fk_id_carte"));
-				joueurLu.setPremiereCarte(gestionCarte.read_Memori(rs2.getInt("fk_id_carte")));
+				joueurLu.setPremiereCarte(gestionCarte.read(rs2.getInt("fk_id_carte")));
 				System.out.println("id joueur : " + numero + " "+joueurLu.getPremiereCarte());
 			}
 		} 
@@ -229,7 +228,7 @@ public class JoueurDAO extends DAO<Joueur>
 		{
 			while(rs.next())
 			{
-				joueurs.add(this.read_Memori(rs.getInt("id_joueur")));
+				joueurs.add(this.read(rs.getInt("id_joueur")));
 			}
 		} 
 		catch (SQLException e) 

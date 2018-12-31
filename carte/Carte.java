@@ -49,6 +49,7 @@ public class Carte {
 	public void setId(int id)       {   this.id_carte=id;   	}
 	public IMotif getMotif()			{	return this.motifCarte;	}
 	public IMotif getAffichage()		{	return this.affichage;	}
+	public IMotif getDos()              {   return this.dos;        }
 	public boolean getEstTrouve()	{	return this.estTrouve;	}
 	
 	

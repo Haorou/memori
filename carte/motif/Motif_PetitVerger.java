@@ -3,7 +3,7 @@ package carte.motif;
 public enum Motif_PetitVerger implements IMotif 
 {
 CERISE("  Cerise "), ANIMAL("  Animal "),CORBEAU(" Corbeau "),
-BLEU("--BLEU---"), ROUGE("--ROUGE--"),VIOLET("--VIOLET-"),JAUNE("--JAUNE--"), VERT("--VERT---");
+BLEU("--BLEU---"), ROUGE("--ROUGE--"),VIOLET("--VIOLET-"),JAUNE("--JAUNE--"), VERT("--VERT---"),SOLEIL("--SOLEIL-");
 	
 	private static final IMotif[] TABLEAU = Motif_PetitVerger.values();
 	String message = "";
