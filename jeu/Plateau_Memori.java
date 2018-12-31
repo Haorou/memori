@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import carte.PaquetCartes;
-import dao.Gestionnaire;
+import dao.gestionnaire.Gestionnaire;
 import view.consoleView;
 
 public class Plateau_Memori extends Plateau

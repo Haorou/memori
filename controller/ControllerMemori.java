@@ -3,7 +3,7 @@ package controller;
 import java.util.List;
 
 import carte.PaquetCartes;
-import dao.Gestionnaire;
+import dao.gestionnaire.Gestionnaire;
 import jeu.Joueur;
 import jeu.Plateau;
 import jeu.Plateau_Memori;

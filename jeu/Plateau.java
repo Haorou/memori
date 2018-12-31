@@ -9,7 +9,7 @@ import carte.Carte;
 import carte.PaquetCartes;
 import carte.motif.IMotif;
 import carte.motif.Motif;
-import dao.Gestionnaire;
+import dao.gestionnaire.Gestionnaire;
 import view.consoleView;
 
 public abstract class Plateau 

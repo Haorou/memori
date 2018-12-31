@@ -236,7 +236,7 @@ public abstract class PlateauDAO extends DAO<Plateau>
 	
 	public List<String> listDePartieEnCours()
 	{
-		String requete1 = "SELECT * FROM " + TABLE + " INNER JOIN participe ON plateau.id_plateau = participe.fk_id_plateau INNER JOIN joueur ON joueur.id_joueur = participe.fk_id_joueur WHERE plateau.id_plateau NOT IN ";
+		String requete1 = "SELECT * FROM " + TABLE + " INNER JOIN participe ON plateau.id_plateau = participe.fk_id_plateau INNER JOIN joueur ON joueur.id_joueur = participe.fk_id_joueur WHERE plateau.type_jeu = "+ this.getJeu() +" AND plateau.id_plateau NOT IN ";
 		String requete2 = "(SELECT fk_id_plateau FROM gagnee) ORDER BY plateau.id_plateau";
 		ResultSet rs = Connexion.executeQuery(requete1 + requete2);
 
@@ -272,7 +272,7 @@ public abstract class PlateauDAO extends DAO<Plateau>
 	
 	public List<String> listDePartieFinie()
 	{
-		String requete1 = "SELECT * FROM " + TABLE + " INNER JOIN participe ON plateau.id_plateau = participe.fk_id_plateau INNER JOIN joueur ON joueur.id_joueur = participe.fk_id_joueur WHERE participe.fk_id_joueur IN ";
+		String requete1 = "SELECT * FROM " + TABLE + " INNER JOIN participe ON plateau.id_plateau = participe.fk_id_plateau INNER JOIN joueur ON joueur.id_joueur = participe.fk_id_joueur WHERE plateau.type_jeu = "+ this.getJeu() +" AND participe.fk_id_joueur IN ";
 		String requete2 = "(SELECT fk_id_joueur FROM gagnee) AND participe.fk_id_plateau IN (SELECT fk_id_plateau FROM gagnee) ";
 
 		ResultSet rs = Connexion.executeQuery(requete1 + requete2);

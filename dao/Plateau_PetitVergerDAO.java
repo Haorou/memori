@@ -2,7 +2,7 @@ package dao;
 
 public class Plateau_PetitVergerDAO extends PlateauDAO 
 {
-	private static final String JEU = "Memori";
+	private static final String JEU = "PetitVerger";
 
 	private static Plateau_PetitVergerDAO instance = null;
 
