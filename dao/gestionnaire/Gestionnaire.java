@@ -7,22 +7,18 @@ import carte.PaquetCartes;
 import dao.CartesDAO;
 import dao.JoueurDAO;
 import dao.PlateauDAO;
-import dao.Plateau_MemoriDAO;
-import dao.Plateau_PetitVergerDAO;
 import jeu.Joueur;
 import jeu.Plateau;
 
 public abstract class Gestionnaire {
 	private static final CartesDAO gestionnaireCartes = CartesDAO.getInstance();
 	private static final JoueurDAO gestionnaireJoueur = JoueurDAO.getInstance();
-
-	private static final PlateauDAO gestionnairePlateau_Memori = Plateau_MemoriDAO.getInstance();
-	private static final PlateauDAO gestionnairePlateau_PetitVerger = Plateau_PetitVergerDAO.getInstance();
 	
+	public abstract PlateauDAO getGestionnairePlateau();
 	
-	public static void createDataPartie()
+	public void createDataPartie()
 	{	
-		gestionnairePlateau_Memori.create();
+		getGestionnairePlateau().create();
 		for (Carte carte : PaquetCartes.paquetCartes) 
 		{
 			gestionnaireCartes.create(carte);	
@@ -42,12 +38,12 @@ public abstract class Gestionnaire {
 			
 			gestionnaireJoueur.insertIntoParticipe(joueur_index);
 		}
-		gestionnairePlateau_Memori.create_joueur_courant();
+		getGestionnairePlateau().create_joueur_courant();
 	}
 	
-	public static void updateDataPartie()
+	public void updateDataPartie()
 	{
-		gestionnairePlateau_Memori.update();
+		getGestionnairePlateau().update();
 		
 		for (Carte carte : PaquetCartes.paquetCartes) 
 		{
@@ -57,35 +53,35 @@ public abstract class Gestionnaire {
 		{
 			gestionnaireJoueur.update(Plateau.getJoueur(i));	
 		}
-		gestionnairePlateau_Memori.update_joueur_courant();
+		getGestionnairePlateau().update_joueur_courant();
 	}
 	
-	public static void supprimerDataPartie()
+	public void supprimerDataPartie()
 	{
 		gestionnaireCartes.deleteAll();
 		gestionnaireJoueur.deleteAll();
-		gestionnairePlateau_Memori.deleteAll();
+		getGestionnairePlateau().deleteAll();
 	}
 	
 	
-	public static Plateau preparerCartesJoueursEtPlateau()
+	public Plateau preparerCartesJoueursEtPlateau()
 	{
 		int choix_joueur = Joueur.SCANNER.nextInt();
 		int id_partie = PlateauDAO.dicoCompteurPlateau.get(choix_joueur);
 		
 		gestionnaireCartes.lireCartesDuPlateau(id_partie);
-		return gestionnairePlateau_Memori.read(id_partie);
+		return getGestionnairePlateau().read(id_partie);
 	}
 	
 	
-	public static List<String> listDePartieEnCours()
+	public List<String> listDePartieEnCours()
 	{
-		return gestionnairePlateau_Memori.listDePartieEnCours();
+		return getGestionnairePlateau().listDePartieEnCours();
 	}
 	
-	public static List<String> listDePartieFinie()
+	public List<String> listDePartieFinie()
 	{
-		return  gestionnairePlateau_Memori.listDePartieFinie();
+		return  getGestionnairePlateau().listDePartieFinie();
 	}
 		
 	public static boolean enregistrerVainqueur()

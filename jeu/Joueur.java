@@ -3,7 +3,7 @@ package jeu;
 import java.util.Scanner;
 
 import carte.Carte;
-import view.consoleView;
+import view.ConsoleView;
 
 public class Joueur 
 {	
@@ -144,17 +144,17 @@ public class Joueur
 	
 	private String choisirSonNom()
 	{
-		consoleView.afficherMessage("");
-		consoleView.afficherMessage("Veuillez choisir un nom pour le joueur : " + this.getNumeroJoueur());
-		consoleView.afficherMessage("");		
+		ConsoleView.afficherMessage("");
+		ConsoleView.afficherMessage("Veuillez choisir un nom pour le joueur : " + this.getNumeroJoueur());
+		ConsoleView.afficherMessage("");		
 		return SCANNER.next();
 	}
 	
 	private int choisirSonAnneeDeNaissance()
 	{
-		consoleView.afficherMessage("");
-		consoleView.afficherMessage(this.nom + ", veuillez donner votre année de naissance : ");
-		consoleView.afficherMessage("");
+		ConsoleView.afficherMessage("");
+		ConsoleView.afficherMessage(this.nom + ", veuillez donner votre année de naissance : ");
+		ConsoleView.afficherMessage("");
 		return SCANNER.nextInt();
 	}
 }

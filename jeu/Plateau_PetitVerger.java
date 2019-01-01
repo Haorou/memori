@@ -8,11 +8,14 @@ import carte.PaquetCartes;
 import carte.motif.IMotif;
 import carte.motif.Motif;
 import carte.motif.Motif_PetitVerger;
-import view.consoleView;
+import dao.gestionnaire.Gestionnaire;
+import dao.gestionnaire.GestionnairePetitVerger;
+import view.ConsoleView;
 
 public class Plateau_PetitVerger extends Plateau 
 {
 	public final String JEU = "PetitVerger";
+	public final Gestionnaire gestionnaire = new GestionnairePetitVerger();
 	
 	final int POINTS_JOUEURS_A_ATTEINDRE = 5;
 	final int POINTS_CORBEAU_A_ATTEINDRE = 6;
@@ -34,16 +37,28 @@ public class Plateau_PetitVerger extends Plateau
 	public Plateau_PetitVerger() {
 		super();
 	}
+	
+	@Override
+	public String getJeu() {
+		// TODO Auto-generated method stub
+		return JEU;
+	}
+	
+	@Override
+	public Gestionnaire getGestionnaire() {
+		// TODO Auto-generated method stub
+		return gestionnaire;
+	}
 
-	//------------------GESTION JEU MEMORI------------------//	
+	//------------------GESTION JEU PETIT VERGER------------------//	
 	public void combienCreerDeJoueurs() 
 	{
 		int reponse = 0;
 		while(reponse < 1 || reponse >4)
 		{
-			consoleView.afficherMessage("");
-			consoleView.afficherMessage("Souhaitez vous jouer seul ou à plusieur ? [1-4]");
-			consoleView.afficherMessage("");
+			ConsoleView.afficherMessage("");
+			ConsoleView.afficherMessage("Souhaitez vous jouer seul ou à plusieur ? [1-4]");
+			ConsoleView.afficherMessage("");
 			reponse = Joueur.SCANNER.nextInt();
 		}
 
@@ -91,10 +106,10 @@ public class Plateau_PetitVerger extends Plateau
 		
 		if(estCompatible)
 		{
-			consoleView.afficherMessage("");
-			consoleView.afficherMessage("Vous venez de lancer le dé");
-			consoleView.afficherMessage("Le motif du dé est le suivant : " + de);			
-			consoleView.afficherMessage("");			
+			ConsoleView.afficherMessage("");
+			ConsoleView.afficherMessage("Vous venez de lancer le dé");
+			ConsoleView.afficherMessage("Le motif du dé est le suivant : " + de);			
+			ConsoleView.afficherMessage("");			
 		}
 		else
 		{
@@ -121,19 +136,19 @@ public class Plateau_PetitVerger extends Plateau
 		while(!unParticipantEstGagnant())
 		{
 			if(nombreDeJoueurs() > 1)
-				consoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
+				ConsoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
 
 			lancerDe();
 			//----- CHOIX CARTE JOUEUR -----// 
-			consoleView.afficherMessage("");
-			consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
-			consoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
+			ConsoleView.afficherMessage("");
+			ConsoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
+			ConsoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
 			
 			int valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;
 			while(valeurChoix1Joueur < 0 || valeurChoix1Joueur > getPaquetJeuTaille() -1 ||
 					retournerCarte(valeurChoix1Joueur).getEstTrouve()  || !checkDeDosMotif(valeurChoix1Joueur))
 			{
-				consoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
+				ConsoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
 				valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;				
 			}
 			
@@ -199,9 +214,9 @@ public class Plateau_PetitVerger extends Plateau
 			message = joueurActuel.getNom() + " à trouvé un corbeau ! :o Il s'approche du cerisier !";
 		}
 
-		consoleView.afficherMessage("");
-		consoleView.afficherMessage(message);
-		consoleView.afficherMessage("");
+		ConsoleView.afficherMessage("");
+		ConsoleView.afficherMessage(message);
+		ConsoleView.afficherMessage("");
 	}
 
 	private void afficherMessageVainqueur()
@@ -227,16 +242,10 @@ public class Plateau_PetitVerger extends Plateau
 		
 		messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
 		
-		consoleView.afficherMessages(messages);
+		ConsoleView.afficherMessages(messages);
 		
-//		Gestionnaire.enregistrerVainqueur();
-//		Gestionnaire.supprimerCartesDuPaquet();
-//		Gestionnaire.supprimerJoueurCourant();
-	}
-
-	@Override
-	public String getJeu() {
-		// TODO Auto-generated method stub
-		return JEU;
+		Gestionnaire.enregistrerVainqueur();
+		Gestionnaire.supprimerCartesDuPaquet();
+		Gestionnaire.supprimerJoueurCourant();
 	}
 }

@@ -10,7 +10,7 @@ import carte.PaquetCartes;
 import carte.motif.IMotif;
 import carte.motif.Motif;
 import dao.gestionnaire.Gestionnaire;
-import view.consoleView;
+import view.ConsoleView;
 
 public abstract class Plateau 
 {
@@ -49,6 +49,24 @@ public abstract class Plateau
 		joueurActuel = getJoueur(indexDB);
 	}
 
+	public abstract String getJeu();
+	
+	public abstract Gestionnaire getGestionnaire();
+	
+	public static Joueur getJoueur(int index) {
+		return joueurs.get(index - 1);
+	}
+
+	public static int nombreDeJoueurs()
+	{
+		return joueurs.size();
+	}
+	
+	public int getPaquetJeuTaille()
+	{
+		return PaquetCartes.getTaillePaquet();
+	}
+
 	public String getDate()
 	{
 		@SuppressWarnings("deprecation")
@@ -59,22 +77,12 @@ public abstract class Plateau
 				"h et "+ date_derniere_utilisationDB.getMinutes() + "min";
 		return message;
 	}
-	
-	public static Joueur getJoueur(int index) {
-		return joueurs.get(index - 1);
-	}
 
-	public int getPaquetJeuTaille()
-	{
-		return PaquetCartes.getTaillePaquet();
-	}
-	
-	public static int nombreDeJoueurs()
-	{
-		return joueurs.size();
-	}
+	//------------------GESTION JEU ------------------//	
+	public abstract void combienCreerDeJoueurs();
 
-	//------------------GESTION JEU MEMORI------------------//	
+	public abstract void jouer();
+	
 	protected String tempsDeJeu()
 	{
 		tempsDeJeuMillis = ( new Date().getTime() - date_nouvelle_utilisation.getTime() ) + tempsDeJeuMillisDB;
@@ -98,8 +106,7 @@ public abstract class Plateau
 		if(indexJoueurCourant +1 < nombreDeJoueur)
 			joueurActuel = joueurs.get(indexJoueurCourant + 1);
 		else
-			joueurActuel = joueurs.get(0);
-		
+			joueurActuel = joueurs.get(0);	
 	}
 			
 	//----------------GERER AFFICHAGE PLATEAU----------------//
@@ -117,7 +124,7 @@ public abstract class Plateau
 			affichagePlateau.add(lignePlateau(tourDeBoucle, i ,3));
 			i += 3;
 		}		
-		consoleView.afficherMessages(affichagePlateau);
+		ConsoleView.afficherMessages(affichagePlateau);
 	}
 
 	private String lignePlateau(int tourDeboucle, int tourDeBoucleIntra, int numeroTemplate)
@@ -161,7 +168,7 @@ public abstract class Plateau
 	//----------------GERER SAUVEGARDE BD----------------//
 	protected void updateData()
 	{
-		Gestionnaire.updateDataPartie();
+		getGestionnaire().updateDataPartie();
 	}
 	
 	protected void createCartesEnMain()
@@ -172,11 +179,5 @@ public abstract class Plateau
 	protected void deleteCartesEnMain()
 	{
 		Gestionnaire.deleteCartesEnMain();
-	}
-
-	public abstract void combienCreerDeJoueurs();
-
-	public abstract void jouer();
-	
-	public abstract String getJeu();	
+	}	
 }

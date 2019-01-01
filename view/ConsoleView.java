@@ -2,7 +2,7 @@ package view;
 
 import java.util.List;
 
-public class consoleView 
+public class ConsoleView 
 {
 	
 	private static int nombreDeTirets;

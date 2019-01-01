@@ -6,11 +6,13 @@ import java.util.List;
 
 import carte.PaquetCartes;
 import dao.gestionnaire.Gestionnaire;
-import view.consoleView;
+import dao.gestionnaire.GestionnaireMemori;
+import view.ConsoleView;
 
 public class Plateau_Memori extends Plateau
 {
 	public final String JEU = "Memori";
+	public final Gestionnaire gestionnaire = new GestionnaireMemori();
 	
 	public Plateau_Memori(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB, int indexDB) {
 		super(tempsDeJeuMillis, date_derniere_utilisation, joueursDB, indexDB);
@@ -25,15 +27,28 @@ public class Plateau_Memori extends Plateau
 		super();
 	}
 
+	@Override
+	public String getJeu() {
+		// TODO Auto-generated method stub
+		return JEU;
+	}
+	
+	@Override
+	public Gestionnaire getGestionnaire() {
+		// TODO Auto-generated method stub
+		return gestionnaire;
+	}
+
+	
 	//------------------GESTION JEU MEMORI------------------//	
 	public void combienCreerDeJoueurs() 
 	{
 		int reponse = 0;
 		while(reponse < 1 || reponse >2)
 		{
-			consoleView.afficherMessage("");
-			consoleView.afficherMessage("Souhaitez vous jouer seul ou à deux ? [1-2]");
-			consoleView.afficherMessage("");
+			ConsoleView.afficherMessage("");
+			ConsoleView.afficherMessage("Souhaitez vous jouer seul ou à deux ? [1-2]");
+			ConsoleView.afficherMessage("");
 			reponse = Joueur.SCANNER.nextInt();
 		}
 
@@ -51,20 +66,20 @@ public class Plateau_Memori extends Plateau
 		while(!estVictorieux())
 		{
 			if(nombreDeJoueurs() > 1)
-				consoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
+				ConsoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
 
 			//----- CHOIX DE LA PREMIERE CARTE -----// 
 			if(joueurActuel.getPremiereCarte().getPositionIndexPaquet() == -1)
 			{
-				consoleView.afficherMessage("");
-				consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
-				consoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
+				ConsoleView.afficherMessage("");
+				ConsoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
+				ConsoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
 				
 				int valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;
 				while(valeurChoix1Joueur < 0 || valeurChoix1Joueur > getPaquetJeuTaille() -1 ||
 						retournerCarte(valeurChoix1Joueur).getEstTrouve())
 				{
-					consoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
+					ConsoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
 					valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;				
 				}
 				
@@ -79,9 +94,9 @@ public class Plateau_Memori extends Plateau
 			}
 			afficherPlateau();	
 			//----- CHOIX DE LA DEUXIEME CARTE -----//
-			consoleView.afficherMessage("");
-			consoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
-			consoleView.afficherMessage("Veuillez choisir une seconde carte : [1-" + getPaquetJeuTaille() + "]");
+			ConsoleView.afficherMessage("");
+			ConsoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
+			ConsoleView.afficherMessage("Veuillez choisir une seconde carte : [1-" + getPaquetJeuTaille() + "]");
 			
 			int valeurChoix2Joueur = Joueur.SCANNER.nextInt() -1;
 
@@ -89,7 +104,7 @@ public class Plateau_Memori extends Plateau
 					retournerCarte(valeurChoix2Joueur).getEstTrouve() ||  
 					retournerCarte(valeurChoix2Joueur) == joueurActuel.getPremiereCarte())
 			{
-				consoleView.afficherMessage("Veuillez choisir une autre seconde carte : [1-" + getPaquetJeuTaille() + "]");	
+				ConsoleView.afficherMessage("Veuillez choisir une autre seconde carte : [1-" + getPaquetJeuTaille() + "]");	
 				valeurChoix2Joueur = Joueur.SCANNER.nextInt() -1;				
 			}
 			
@@ -194,16 +209,10 @@ public class Plateau_Memori extends Plateau
 			}
 			messages.add("La partie s'est déroulée en : " +  tempsDeJeu());		
 		}
-		consoleView.afficherMessages(messages);
+		ConsoleView.afficherMessages(messages);
 		
 		Gestionnaire.enregistrerVainqueur();
 		Gestionnaire.supprimerCartesDuPaquet();
 		Gestionnaire.supprimerJoueurCourant();
-	}
-
-	@Override
-	public String getJeu() {
-		// TODO Auto-generated method stub
-		return JEU;
 	}
 }
