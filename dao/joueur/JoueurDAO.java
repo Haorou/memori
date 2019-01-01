@@ -10,15 +10,15 @@ import java.util.List;
 import dao.Connexion;
 import dao.DAO;
 import dao.cartes.CartesDAO;
-import jeu.Joueur;
-import jeu.Plateau;
+import joueur.Joueur;
+import plateau.Plateau;
 
 public abstract class JoueurDAO extends DAO<Joueur> 
 {
-	private static final String TABLE = "joueur";
-	private static final String TABLE_PAR = "participe";
+	protected static final String TABLE = "joueur";
+	protected static final String TABLE_PAR = "participe";
 	private static final String TABLE_JC = "joueur_courant";
-	private static final String CLE = "id_joueur";
+	protected static final String CLE = "id_joueur";
 	
 	public abstract CartesDAO getGestionCartes();
 	
@@ -146,15 +146,13 @@ public abstract class JoueurDAO extends DAO<Joueur>
 		try {
 			if(Plateau.joueurVainqueur == null)
 			{
-				PreparedStatement pst1 = Connexion.getInstance().prepareStatement(requete);
-				pst1.setInt(1, Plateau.id_plateau);
-				pst1.setInt(2, Plateau.getJoueur(0).getId());
-				pst1.executeUpdate();
-				
-				PreparedStatement pst2 = Connexion.getInstance().prepareStatement(requete);
-				pst2.setInt(1, Plateau.id_plateau);
-				pst2.setInt(2, Plateau.getJoueur(1).getId());
-				pst2.executeUpdate();
+				for(int x = 1; x <= Plateau.joueurs.size() ; x++)
+				{
+					PreparedStatement pst1 = Connexion.getInstance().prepareStatement(requete);
+					pst1.setInt(1, Plateau.id_plateau);
+					pst1.setInt(2, Plateau.getJoueur(x).getId());
+					pst1.executeUpdate();				
+				}
 			}
 			else
 			{
@@ -171,43 +169,6 @@ public abstract class JoueurDAO extends DAO<Joueur>
 		}			
 
 		return succes;
-	}
-	
-	@Override
-	public Joueur read(int numero) 
-	{
-		ResultSet rs1 = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN "+TABLE_PAR+" ON "+TABLE_PAR+".fk_id_joueur = joueur.id_joueur "
-				+ "WHERE " + CLE + " = " + numero);
-		
-		ResultSet rs2 = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN cartes_en_main ON cartes_en_main.fk_id_joueur = joueur.id_joueur WHERE " + CLE + " =" + numero);
-
-		Joueur joueurLu = null;
-		CartesDAO gestionCarte = getGestionCartes();
-		try 
-		{
-			if(rs1.next())
-			{
-				joueurLu = new Joueur(rs1.getString("nom"),
-									  rs1.getInt("nombre_erreurs"),
-									  rs1.getInt("nombre_points"),
-									  rs1.getInt("numero_joueur"),
-									  rs1.getInt("annee_naissance"),
-									  rs1.getInt("id_joueur")
-									  );
-			}
-
-			if(rs2.next())
-			{
-				System.out.println(rs2.getInt("fk_id_carte"));
-				joueurLu.setPremiereCarte(gestionCarte.read(rs2.getInt("fk_id_carte")));
-				System.out.println("id joueur : " + numero + " "+joueurLu.getPremiereCarte());
-			}
-		} 
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-		return joueurLu;
 	}
 	
 	public List<Joueur> lireJoueursPlateauCourant(int id_plateau)

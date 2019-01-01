@@ -3,9 +3,9 @@ package controller;
 import carte.PaquetCartes;
 import dao.gestionnaire.Gestionnaire;
 import dao.gestionnaire.GestionnaireMemori;
-import jeu.Joueur;
-import jeu.Plateau;
-import jeu.Plateau_Memori;
+import joueur.Joueur;
+import plateau.Plateau;
+import plateau.Plateau_Memori;
 import view.ConsoleView;
 
 public class ControllerMemori extends Controller

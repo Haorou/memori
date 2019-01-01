@@ -2,10 +2,9 @@ package controller;
 
 import java.util.List;
 
-import carte.PaquetCartes;
 import dao.gestionnaire.Gestionnaire;
-import jeu.Joueur;
-import jeu.Plateau;
+import joueur.Joueur;
+import plateau.Plateau;
 import view.ConsoleView;
 
 public abstract class Controller

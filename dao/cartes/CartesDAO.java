@@ -8,14 +8,13 @@ import java.sql.Statement;
 import carte.Carte;
 import carte.PaquetCartes;
 import carte.motif.IMotif;
-import carte.motif.Motif;
 import dao.Connexion;
 import dao.DAO;
-import jeu.Plateau;
+import plateau.Plateau;
 
 public abstract class CartesDAO extends DAO<Carte> {
-	private static final String TABLE = "carte";
-	private static final String CLE = "id_carte";
+	protected static final String TABLE = "carte";
+	protected static final String CLE = "id_carte";
 	
 	public abstract IMotif getMotif(int index);
 	
@@ -39,7 +38,7 @@ public abstract class CartesDAO extends DAO<Carte> {
 				obj.setId(rs.getInt(1));
 			}
 			
-			String requete2 = "INSERT INTO dos_carte (fk_id_carte, kf_id_motif_dos_carte) VALUES(?,?)";
+			String requete2 = "INSERT INTO dos_carte (fk_id_carte, fk_id_motif_dos_carte) VALUES(?,?)";
 			PreparedStatement pst2 = Connexion.getInstance().prepareStatement(requete2);
 
 			pst2.setInt(1, obj.getId());
@@ -84,7 +83,7 @@ public abstract class CartesDAO extends DAO<Carte> {
 			pst.setInt(3, obj.getId());
 			pst.executeUpdate();
 			
-			String requete2 = "UPDATE dos_carte SET kf_id_motif_dos_carte = ? WHERE fk_id_carte = ?";
+			String requete2 = "UPDATE dos_carte SET fk_id_motif_dos_carte = ? WHERE fk_id_carte = ?";
 			PreparedStatement pst2 = Connexion.getInstance().prepareStatement(requete2);
 
 			pst2.setInt(1, obj.getDos().ordinal());
@@ -99,44 +98,6 @@ public abstract class CartesDAO extends DAO<Carte> {
 		return succes;
 	}
 
-	@Override
-	public Carte read(int id) {
-		ResultSet rs = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN dos_carte ON carte.id_carte = dos_carte.fk_id_carte WHERE " + CLE + " =" + id);
-
-		Carte carteLu = null;
-		int positionIndex;
-		int dos_de_carte;
-		try 
-		{
-			if (rs.next()) 
-			{	
-				positionIndex = rs.getInt("position_carte");
-				if(rs.wasNull())
-					positionIndex = -1;
-				
-				carteLu = new Carte(
-						getMotif(rs.getInt("fk_id_motif_carte")), 
-						rs.getInt("est_trouve") == 1 ?true:false,
-						positionIndex);
-				
-				carteLu.setId(rs.getInt("id_carte"));
-				
-				dos_de_carte = rs.getInt("fk_id_motif_dos_carte");
-				if(!rs.wasNull())
-				{
-					if(carteLu.getEstTrouve())
-						carteLu.setDos(Motif.VIDE);
-					else
-						carteLu.setDos(getMotif(dos_de_carte));					
-				}
-			}
-		} 
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-		return carteLu;
-	}
 	
 	public boolean createCartesEnMain()
 	{
@@ -229,6 +190,9 @@ public abstract class CartesDAO extends DAO<Carte> {
 		boolean succes = true;
 		try 
 		{
+			PreparedStatement pst1 = Connexion.getInstance().prepareStatement("DELETE d FROM dos_carte d INNER JOIN carte c ON d.fk_id_carte = c.id_carte WHERE c.fk_id_plateau = " + Plateau.id_plateau);
+			pst1.executeUpdate();
+			
 			PreparedStatement pst = Connexion.getInstance().prepareStatement("DELETE FROM " + TABLE + " WHERE fk_id_plateau = " + Plateau.id_plateau);
 			pst.executeUpdate();
 			

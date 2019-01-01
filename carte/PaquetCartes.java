@@ -43,7 +43,7 @@ public class PaquetCartes
 	}
 	
 	public static Carte get(int indice) {
-		 Carte carte = indice== -1?new Carte():paquetCartes.get(indice);
+		 Carte carte = indice== -1?null:paquetCartes.get(indice);
 		
 		return carte;
 	}
@@ -63,10 +63,14 @@ public class PaquetCartes
 	
 	private static void remplirPaquetCartes_Memori(int nombreDeMotifs) {
 		paquetCartes = new ArrayList<Carte>(taillePaquet);
-		
+		Carte carte;
 		for (int i = 0; i < nombreDeMotifs; i++) {
-			for (int j = 0; j < 2; j++) {
-				add( new Carte( Motif_Memori.get(i) ) );	
+			for (int j = 0; j < 2; j++) 
+			{
+				carte = new Carte_Memori( Motif_Memori.get(i) );
+				carte.setDos(Motif_Memori.DOS);
+				carte.carteRetourneVersDos();
+				add( carte);	
 			}
 		}
 		Collections.shuffle(paquetCartes);
@@ -76,13 +80,13 @@ public class PaquetCartes
 		paquetCartes = new ArrayList<Carte>(taillePaquet);
 		
 		for (int i = 0; i < 6; i++) 
-			add( new Carte( Motif_PetitVerger.CORBEAU ) );	
+			add( new Carte_PetitVerger( Motif_PetitVerger.CORBEAU ) );	
 		
 		for (int i = 0; i < 5; i++) 
-			add( new Carte( Motif_PetitVerger.CERISE ) );	
+			add( new Carte_PetitVerger( Motif_PetitVerger.CERISE ) );	
 		
 		for (int i = 0; i < 4; i++) 
-			add( new Carte( Motif_PetitVerger.ANIMAL ) );
+			add( new Carte_PetitVerger( Motif_PetitVerger.ANIMAL ) );
 		
 		setSizeTaillePaquet();
 		
@@ -91,15 +95,27 @@ public class PaquetCartes
 		for(int i = 0; i < getTaillePaquet(); i++)
 		{
 			if(i <= 2)
-				paquetCartes.get(i).setDos(Motif_PetitVerger.BLEU);
+			{
+				paquetCartes.get(i).setDos(Motif_PetitVerger.BLEU);				
+			}
 			else if(i <= 5)
-				paquetCartes.get(i).setDos(Motif_PetitVerger.JAUNE);
+			{
+				paquetCartes.get(i).setDos(Motif_PetitVerger.JAUNE);				
+			}
+
 			else if(i <= 8)
-				paquetCartes.get(i).setDos(Motif_PetitVerger.ROUGE);
+			{
+				paquetCartes.get(i).setDos(Motif_PetitVerger.ROUGE);				
+			}
 			else if(i <= 11)
-				paquetCartes.get(i).setDos(Motif_PetitVerger.VERT);
+			{
+				paquetCartes.get(i).setDos(Motif_PetitVerger.VERT);	
+			}
 			else if(i <= 14)
-				paquetCartes.get(i).setDos(Motif_PetitVerger.VIOLET);
+			{
+				paquetCartes.get(i).setDos(Motif_PetitVerger.VIOLET);				
+			}
+			paquetCartes.get(i).carteRetourneVersDos();
 		}
 		
 		Collections.shuffle(paquetCartes);

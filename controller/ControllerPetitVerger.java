@@ -3,8 +3,8 @@ package controller;
 import carte.PaquetCartes;
 import dao.gestionnaire.Gestionnaire;
 import dao.gestionnaire.GestionnairePetitVerger;
-import jeu.Plateau;
-import jeu.Plateau_PetitVerger;
+import plateau.Plateau;
+import plateau.Plateau_PetitVerger;
 
 public class ControllerPetitVerger extends Controller
 {

@@ -1,20 +1,18 @@
-package jeu;
+package joueur;
 
 import java.util.Scanner;
 
 import carte.Carte;
 import view.ConsoleView;
 
-public class Joueur 
+public abstract class Joueur 
 {	
 	private int id_joueur;
 	
 	public static final Scanner SCANNER = new Scanner(System.in);
 	private static int nombreDeJoueurs = 0;
 	private int numeroDuJoueur = 0;
- 
-	private Carte[] choixJoueur = new Carte[] {new Carte(), new Carte()};
-	
+
 	private String nom = "";
 	private int nombreErreurs = 0;
 	private int nombrePoints = 0;
@@ -44,10 +42,18 @@ public class Joueur
 		this.nom = nomDB;
 		this.nombreErreurs = nombreErreursDB;
 		this.nombrePoints = nombrePointsDB;
-		this.choixJoueur = choixJoueurDB;
+		this.setChoixJoueurs(choixJoueurDB);
 		this.numeroDuJoueur = numeroDuJoueurDB;
 		this.id_joueur = id_joueurDB;
 	}
+	
+	public abstract void setChoixJoueurs(Carte[] cartes);
+	public abstract void setPremiereCarte(Carte nouvelCarte);
+	public abstract void setSecondeCarte(Carte nouvelCarte);
+	public abstract void reinitialiserSesCartes();
+	public abstract Carte getPremiereCarte();
+	public abstract Carte getSecondeCarte();
+	
 	
 	public int getId()
 	{
@@ -76,33 +82,9 @@ public class Joueur
 	{
 		return this.numeroDuJoueur;
 	}
-	
-	public Carte getPremiereCarte()
-	{
-		return this.choixJoueur[0];
-	}
-	
-	public Carte getSecondeCarte()
-	{
-		return this.choixJoueur[1];		
-	}
-	
-	public void setPremiereCarte(Carte nouvelCarte)
-	{
-		this.choixJoueur[0] = nouvelCarte;
-	}
-	
-	public void setSecondeCarte(Carte nouvelCarte)
-	{
-		this.choixJoueur[1] = nouvelCarte;		
-	}
 
 	public void setNumeroDuJoueur(int numeroDuJoueur) {
 		this.numeroDuJoueur = numeroDuJoueur;
-	}
-
-	public void setChoixJoueur(Carte[] choixJoueur) {
-		this.choixJoueur = choixJoueur;
 	}
 
 	public void setNom(String nom) {
@@ -135,11 +117,6 @@ public class Joueur
 	public void ajouterUnPoint()
 	{
 		this.nombrePoints++;
-	}
-	
-	public void reinitialiserSesCartes()
-	{
-		this.choixJoueur =  new Carte[] {new Carte(), new Carte()};
 	}
 	
 	private String choisirSonNom()

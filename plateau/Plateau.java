@@ -1,4 +1,4 @@
-package jeu;
+package plateau;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,8 +8,9 @@ import java.util.concurrent.TimeUnit;
 import carte.Carte;
 import carte.PaquetCartes;
 import carte.motif.IMotif;
-import carte.motif.Motif;
+import carte.motif.Motif_Memori;
 import dao.gestionnaire.Gestionnaire;
+import joueur.Joueur;
 import view.ConsoleView;
 
 public abstract class Plateau 
@@ -91,6 +92,11 @@ public abstract class Plateau
 		return minutes + " minutes " + seconds + " secondes.";
 	}
 	
+	protected Carte get(int indice)
+	{
+		return PaquetCartes.get(indice);
+	}
+	
 	protected Carte retournerCarte(int indice)
 	{
 		PaquetCartes.get(indice).carteRetourneVersMotif();
@@ -162,7 +168,7 @@ public abstract class Plateau
 	
 	private IMotif afficherCarte(int indice)
 	{
-		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif.VIDE;
+		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif_Memori.DOSS;
 	}
 
 	//----------------GERER SAUVEGARDE BD----------------//

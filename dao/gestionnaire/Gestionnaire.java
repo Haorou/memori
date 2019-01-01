@@ -7,8 +7,8 @@ import carte.PaquetCartes;
 import dao.cartes.CartesDAO;
 import dao.joueur.JoueurDAO;
 import dao.plateau.PlateauDAO;
-import jeu.Joueur;
-import jeu.Plateau;
+import joueur.Joueur;
+import plateau.Plateau;
 
 public abstract class Gestionnaire {	
 	public abstract JoueurDAO getGestionnaireJoueur();

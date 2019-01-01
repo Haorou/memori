@@ -1,24 +1,29 @@
 package carte;
 
 import carte.motif.IMotif;
-import carte.motif.Motif;
 
-public class Carte {
+public abstract class Carte {
 	
 	private int id_carte;
 	
 	private final IMotif motifCarte;
-	private IMotif dos = Motif.DOS;
-	private IMotif affichage = this.dos;
+	private IMotif affichage;
 	private boolean estTrouve = false;
 	private int positionIndexPaquet = -1;
 	
+	public abstract IMotif getDos();
+	public abstract void setDos(IMotif dos);
+	public abstract IMotif getEnleve();
+	
 	public Carte()
 	{
-		this.motifCarte = this.dos;
+		this.motifCarte = this.getDos();
+		this.affichage = this.getDos();
 	}
 	
-	public Carte(IMotif motif) {
+	public Carte(IMotif motif) 
+	{
+		this.affichage = this.getDos();
 		this.motifCarte = motif;
 	}
 
@@ -49,7 +54,6 @@ public class Carte {
 	public void setId(int id)       {   this.id_carte=id;   	}
 	public IMotif getMotif()			{	return this.motifCarte;	}
 	public IMotif getAffichage()		{	return this.affichage;	}
-	public IMotif getDos()              {   return this.dos;        }
 	public boolean getEstTrouve()	{	return this.estTrouve;	}
 	
 	
@@ -67,7 +71,7 @@ public class Carte {
 
 	public void carteEnleve()
 	{
-		this.affichage = Motif.VIDE;
+		this.affichage = getEnleve();
 	}
 	
 	public void carteRetourneVersMotif() {
@@ -75,13 +79,7 @@ public class Carte {
 	}
 	
 	public void carteRetourneVersDos() {
-		this.affichage = this.dos;
-	}
-	
-	public void setDos(IMotif motif) 	
-	{ 	
-		this.dos = motif; 		
-		carteRetourneVersDos();
+		this.affichage = this.getDos();
 	}
 	
 	public boolean equals(Carte autre)

@@ -1,4 +1,4 @@
-package jeu;
+package plateau;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -6,10 +6,11 @@ import java.util.List;
 
 import carte.PaquetCartes;
 import carte.motif.IMotif;
-import carte.motif.Motif;
 import carte.motif.Motif_PetitVerger;
 import dao.gestionnaire.Gestionnaire;
 import dao.gestionnaire.GestionnairePetitVerger;
+import joueur.Joueur;
+import joueur.Joueur_PetitVerger;
 import view.ConsoleView;
 
 public class Plateau_PetitVerger extends Plateau 
@@ -20,7 +21,7 @@ public class Plateau_PetitVerger extends Plateau
 	final int POINTS_JOUEURS_A_ATTEINDRE = 5;
 	final int POINTS_CORBEAU_A_ATTEINDRE = 6;
 	private int points_corbeau = 0;
-	private IMotif de = Motif.VIDE;
+	private IMotif de = Motif_PetitVerger.VIDE;
 	
 	public Plateau_PetitVerger(long tempsDeJeuMillis, Date date_derniere_utilisation, List<Joueur> joueursDB,
 			int indexDB) {
@@ -64,7 +65,7 @@ public class Plateau_PetitVerger extends Plateau
 
 		joueurs = new ArrayList<Joueur>(reponse);
 		for(int x = 0; x < reponse; x++)
-			joueurs.add(new Joueur());
+			joueurs.add(new Joueur_PetitVerger());
 		
 		joueurActuel = joueurs.get(0);
 	}
@@ -165,7 +166,7 @@ public class Plateau_PetitVerger extends Plateau
 			if(nombreDeJoueurs() > 1)
 				passerAuJoueurSuivant();
 			
-//			updateData();
+			updateData();
 		}
 		afficherMessageVainqueur();
 	}
@@ -234,6 +235,7 @@ public class Plateau_PetitVerger extends Plateau
 		{
 			messages.add("BRAVO " + noms_des_joueurs);
 			messages.add("Vous avez gagnez !");
+			gestionnaire.enregistrerVainqueur();
 		}
 		else
 		{
@@ -243,8 +245,7 @@ public class Plateau_PetitVerger extends Plateau
 		messages.add("La partie s'est déroulée en : " +  tempsDeJeu());
 		
 		ConsoleView.afficherMessages(messages);
-		
-		gestionnaire.enregistrerVainqueur();
+
 		gestionnaire.supprimerCartesDuPaquet();
 		gestionnaire.supprimerJoueurCourant();
 	}

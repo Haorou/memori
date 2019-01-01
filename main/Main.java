@@ -3,7 +3,7 @@ package main;
 import controller.Controller;
 import controller.ControllerMemori;
 import controller.ControllerPetitVerger;
-import jeu.Joueur;
+import joueur.Joueur;
 import view.ConsoleView;
 
 public class Main {

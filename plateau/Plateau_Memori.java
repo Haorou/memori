@@ -1,12 +1,15 @@
-package jeu;
+package plateau;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import carte.PaquetCartes;
+import carte.motif.Motif_Memori;
 import dao.gestionnaire.Gestionnaire;
 import dao.gestionnaire.GestionnaireMemori;
+import joueur.Joueur;
+import joueur.Joueur_Memori;
 import view.ConsoleView;
 
 public class Plateau_Memori extends Plateau
@@ -54,30 +57,35 @@ public class Plateau_Memori extends Plateau
 
 		joueurs = new ArrayList<Joueur>(reponse);
 		for(int x = 0; x < reponse; x++)
-			joueurs.add(new Joueur());
+			joueurs.add(new Joueur_Memori());
 		
 		joueurActuel = joueurs.get(0);
 	}
 	
 	public void jouer()
 	{	
-		afficherPlateau();
-		
 		while(!estVictorieux())
 		{
 			if(nombreDeJoueurs() > 1)
+			{
+				ConsoleView.afficherMessage("");
 				ConsoleView.afficherMessage("C'est le tour du joueur " + joueurActuel.getNumeroJoueur() + " [ " + joueurActuel.getNom() + " ]");
+			}
 
 			//----- CHOIX DE LA PREMIERE CARTE -----// 
 			if(joueurActuel.getPremiereCarte().getPositionIndexPaquet() == -1)
 			{
+				ConsoleView.afficherMessage("");
+				ConsoleView.afficherOptions("CHOISISSEZ DEUX CARTES");
+				ConsoleView.afficherMessage("");
+				afficherPlateau();
 				ConsoleView.afficherMessage("");
 				ConsoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
 				ConsoleView.afficherMessage("Veuillez choisir une premiére carte : [1-" + getPaquetJeuTaille() + "]");
 				
 				int valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;
 				while(valeurChoix1Joueur < 0 || valeurChoix1Joueur > getPaquetJeuTaille() -1 ||
-						retournerCarte(valeurChoix1Joueur).getEstTrouve())
+						get(valeurChoix1Joueur).getEstTrouve())
 				{
 					ConsoleView.afficherMessage("Veuillez choisir une autre première carte : [1-" + getPaquetJeuTaille() + "]");	
 					valeurChoix1Joueur = Joueur.SCANNER.nextInt() -1;				
@@ -89,10 +97,12 @@ public class Plateau_Memori extends Plateau
 			}
 			else
 			{
-				System.out.println(joueurActuel.getPremiereCarte().getPositionIndexPaquet());
 				retournerCarte(joueurActuel.getPremiereCarte().getPositionIndexPaquet());
+				ConsoleView.afficherMessage("");
+				ConsoleView.afficherOptions("CHOISISSEZ UNE CARTE");
+				ConsoleView.afficherMessage("");
 			}
-			afficherPlateau();	
+			afficherPlateau();
 			//----- CHOIX DE LA DEUXIEME CARTE -----//
 			ConsoleView.afficherMessage("");
 			ConsoleView.afficherMessage("Temps de jeu : " + tempsDeJeu());
@@ -101,8 +111,8 @@ public class Plateau_Memori extends Plateau
 			int valeurChoix2Joueur = Joueur.SCANNER.nextInt() -1;
 
 			while(valeurChoix2Joueur < 0 || valeurChoix2Joueur > getPaquetJeuTaille() -1 ||
-					retournerCarte(valeurChoix2Joueur).getEstTrouve() ||  
-					retournerCarte(valeurChoix2Joueur) == joueurActuel.getPremiereCarte())
+					get(valeurChoix2Joueur).getEstTrouve() ||  
+					get(valeurChoix2Joueur).getId() == joueurActuel.getPremiereCarte().getId())
 			{
 				ConsoleView.afficherMessage("Veuillez choisir une autre seconde carte : [1-" + getPaquetJeuTaille() + "]");	
 				valeurChoix2Joueur = Joueur.SCANNER.nextInt() -1;				
@@ -140,13 +150,16 @@ public class Plateau_Memori extends Plateau
 		if(joueurActuel.getPremiereCarte().equals(joueurActuel.getSecondeCarte()))
 		{
 			joueurActuel.getPremiereCarte().setEstTrouve(true);
+			joueurActuel.getPremiereCarte().carteEnleve();
 			joueurActuel.getSecondeCarte().setEstTrouve(true);
+			joueurActuel.getSecondeCarte().carteEnleve();
 			joueurActuel.ajouterUnPoint();
 		}
 		else
 		{
-			joueurActuel.getPremiereCarte().carteRetourneVersDos();
-			joueurActuel.getSecondeCarte().carteRetourneVersDos();
+			get(joueurActuel.getPremiereCarte().getPositionIndexPaquet()).carteRetourneVersDos();
+
+			get(joueurActuel.getSecondeCarte().getPositionIndexPaquet()).carteRetourneVersDos();
 			joueurActuel.ajouterUneErreur();
 		}
 	}

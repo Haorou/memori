@@ -16,9 +16,9 @@ import dao.TransTypeSQL_GregorianCalendar;
 import dao.joueur.JoueurDAO;
 import dao.joueur.Joueur_MemoriDAO;
 import dao.joueur.Joueur_PetitVergerDAO;
-import jeu.Plateau;
-import jeu.Plateau_Memori;
-import jeu.Plateau_PetitVerger;
+import plateau.Plateau;
+import plateau.Plateau_Memori;
+import plateau.Plateau_PetitVerger;
 
 public abstract class PlateauDAO extends DAO<Plateau> 
 {
