@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import carte.PaquetCartes;
-import carte.motif.Motif_Memori;
 import dao.gestionnaire.Gestionnaire;
 import dao.gestionnaire.GestionnaireMemori;
 import joueur.Joueur;

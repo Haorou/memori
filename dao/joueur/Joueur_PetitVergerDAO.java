@@ -35,11 +35,8 @@ public class Joueur_PetitVergerDAO extends JoueurDAO
 	{
 		ResultSet rs1 = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN "+TABLE_PAR+" ON "+TABLE_PAR+".fk_id_joueur = joueur.id_joueur "
 				+ "WHERE " + CLE + " = " + numero);
-		
-		ResultSet rs2 = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN cartes_en_main ON cartes_en_main.fk_id_joueur = joueur.id_joueur WHERE " + CLE + " =" + numero);
 
 		Joueur joueurLu = null;
-		CartesDAO gestionCarte = getGestionCartes();
 		try 
 		{
 			if(rs1.next())
