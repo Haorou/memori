@@ -1,4 +1,4 @@
-package dao;
+package dao.plateau;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dao.Connexion;
+import dao.DAO;
+import dao.TransTypeSQL_GregorianCalendar;
+import dao.joueur.JoueurDAO;
+import dao.joueur.Joueur_MemoriDAO;
+import dao.joueur.Joueur_PetitVergerDAO;
 import jeu.Plateau;
 import jeu.Plateau_Memori;
 import jeu.Plateau_PetitVerger;
@@ -41,14 +47,6 @@ public abstract class PlateauDAO extends DAO<Plateau>
 			{
 				Plateau.id_plateau = rs.getInt(1);
 			}
-			
-			String requete2 = "INSERT INTO joueur_courant"
-					+ " (fk_id_joueur,fk_id_plateau) VALUES(?,?)";
-			PreparedStatement pst2 = Connexion.getInstance().prepareStatement(requete2,  Statement.RETURN_GENERATED_KEYS);
-
-			pst2.setInt(1, Plateau.joueurActuel.getNumeroJoueur());
-			pst2.setInt(2, Plateau.id_plateau);
-			pst2.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -202,12 +200,13 @@ public abstract class PlateauDAO extends DAO<Plateau>
 				+ "WHERE " + CLE + " = " + id);
 		
 		Plateau plateauLu = null;
+		JoueurDAO joueurs_db = null;
 		try {
-			JoueurDAO joueurs_db = JoueurDAO.getInstance();
 			if (rs.next()) 
 			{
-				if(rs.getString("type_jeu") == "Memori")
+				if(rs.getString("type_jeu").equals("Memori"))
 				{
+					joueurs_db = Joueur_MemoriDAO.getInstance();
 					plateauLu = new Plateau_Memori(
 							rs.getInt("temps_de_jeu"),
 							TransTypeSQL_GregorianCalendar.TimestampToDate(rs.getTimestamp("date_utilisation")),
@@ -216,8 +215,9 @@ public abstract class PlateauDAO extends DAO<Plateau>
 							rs.getInt("id_plateau")
 							);
 				}
-				else if(rs.getString("type_jeu") == "PetitVerger")
+				else if(rs.getString("type_jeu").equals("Petit Verger"))
 				{
+					joueurs_db = Joueur_PetitVergerDAO.getInstance();
 					plateauLu = new Plateau_PetitVerger(
 							rs.getInt("temps_de_jeu"),
 							TransTypeSQL_GregorianCalendar.TimestampToDate(rs.getTimestamp("date_utilisation")),
@@ -226,12 +226,10 @@ public abstract class PlateauDAO extends DAO<Plateau>
 							rs.getInt("id_plateau")
 							);
 				}
-
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return plateauLu;
 	}
 	

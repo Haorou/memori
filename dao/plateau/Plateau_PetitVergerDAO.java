@@ -1,8 +1,8 @@
-package dao;
+package dao.plateau;
 
 public class Plateau_PetitVergerDAO extends PlateauDAO 
 {
-	private static final String JEU = "PetitVerger";
+	private static final String JEU = "Petit Verger";
 
 	private static Plateau_PetitVergerDAO instance = null;
 

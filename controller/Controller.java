@@ -16,6 +16,7 @@ public abstract class Controller
 	public abstract Plateau getPlateau();
 	public abstract void setPlateau(Plateau plateauCharge);
 	public abstract Gestionnaire getGestionnaire();
+	public abstract void preparePaquetCarte();
 	
 	public void lancerPartie ()
 	{
@@ -62,8 +63,6 @@ public abstract class Controller
 		{
 			nouvellePartie();
 		}
-
-		nouvellePartie();
 	}
 	
 	private void reprisePartie()
@@ -74,7 +73,6 @@ public abstract class Controller
 		ConsoleView.afficherMessage("");
 		
 		setPlateau(getGestionnaire().preparerCartesJoueursEtPlateau());
-
 		getPlateau().jouer();
 	}
 	
@@ -82,7 +80,7 @@ public abstract class Controller
 	{
 		ConsoleView.afficherOptions("Lancement nouvelle parie");
 		
-		PaquetCartes.premierPaquetCartes_PetitVerger();
+		preparePaquetCarte();
 		
 		getPlateau().combienCreerDeJoueurs();
 		

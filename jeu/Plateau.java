@@ -173,11 +173,11 @@ public abstract class Plateau
 	
 	protected void createCartesEnMain()
 	{
-		Gestionnaire.createCartesEnMain();
+		getGestionnaire().createCartesEnMain();
 	}
 	
 	protected void deleteCartesEnMain()
 	{
-		Gestionnaire.deleteCartesEnMain();
+		getGestionnaire().deleteCartesEnMain();
 	}	
 }

@@ -1,4 +1,4 @@
-package dao;
+package dao.joueur;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,27 +7,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.Connexion;
+import dao.DAO;
+import dao.cartes.CartesDAO;
 import jeu.Joueur;
 import jeu.Plateau;
 
-public class JoueurDAO extends DAO<Joueur> 
+public abstract class JoueurDAO extends DAO<Joueur> 
 {
 	private static final String TABLE = "joueur";
 	private static final String TABLE_PAR = "participe";
 	private static final String TABLE_JC = "joueur_courant";
 	private static final String CLE = "id_joueur";
 	
-	private static JoueurDAO instance = null;
-	
-	public static JoueurDAO getInstance()
-	{
-		if(instance == null)
-		{
-			instance = new JoueurDAO();
-		}
-		return instance;
-	}
-
+	public abstract CartesDAO getGestionCartes();
 	
 	@Override
 	public boolean create(Joueur obj) 
@@ -189,7 +182,7 @@ public class JoueurDAO extends DAO<Joueur>
 		ResultSet rs2 = Connexion.executeQuery("SELECT * FROM " + TABLE + " INNER JOIN cartes_en_main ON cartes_en_main.fk_id_joueur = joueur.id_joueur WHERE " + CLE + " =" + numero);
 
 		Joueur joueurLu = null;
-		CartesDAO gestionCarte = new CartesDAO();
+		CartesDAO gestionCarte = getGestionCartes();
 		try 
 		{
 			if(rs1.next())

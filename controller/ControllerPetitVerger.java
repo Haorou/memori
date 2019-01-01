@@ -1,5 +1,6 @@
 package controller;
 
+import carte.PaquetCartes;
 import dao.gestionnaire.Gestionnaire;
 import dao.gestionnaire.GestionnairePetitVerger;
 import jeu.Plateau;
@@ -25,5 +26,10 @@ public class ControllerPetitVerger extends Controller
 	@Override
 	public void setPlateau(Plateau plateauCharge) {
 		this.plateauDeJeu = plateauCharge;
+	}
+	
+	@Override
+	public void preparePaquetCarte() {
+		PaquetCartes.premierPaquetCartes_PetitVerger();
 	}
 }

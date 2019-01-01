@@ -211,8 +211,8 @@ public class Plateau_Memori extends Plateau
 		}
 		ConsoleView.afficherMessages(messages);
 		
-		Gestionnaire.enregistrerVainqueur();
-		Gestionnaire.supprimerCartesDuPaquet();
-		Gestionnaire.supprimerJoueurCourant();
+		gestionnaire.enregistrerVainqueur();
+		gestionnaire.supprimerCartesDuPaquet();
+		gestionnaire.supprimerJoueurCourant();
 	}
 }

@@ -4,16 +4,15 @@ import java.util.List;
 
 import carte.Carte;
 import carte.PaquetCartes;
-import dao.CartesDAO;
-import dao.JoueurDAO;
-import dao.PlateauDAO;
+import dao.cartes.CartesDAO;
+import dao.joueur.JoueurDAO;
+import dao.plateau.PlateauDAO;
 import jeu.Joueur;
 import jeu.Plateau;
 
-public abstract class Gestionnaire {
-	private static final CartesDAO gestionnaireCartes = CartesDAO.getInstance();
-	private static final JoueurDAO gestionnaireJoueur = JoueurDAO.getInstance();
-	
+public abstract class Gestionnaire {	
+	public abstract JoueurDAO getGestionnaireJoueur();
+	public abstract CartesDAO getGestionnaireCartes();
 	public abstract PlateauDAO getGestionnairePlateau();
 	
 	public void createDataPartie(Plateau plateauACreer)
@@ -21,7 +20,7 @@ public abstract class Gestionnaire {
 		getGestionnairePlateau().create(plateauACreer);
 		for (Carte carte : PaquetCartes.paquetCartes) 
 		{
-			gestionnaireCartes.create(carte);	
+			getGestionnaireCartes().create(carte);	
 		}
 		
 		int id_joueur;
@@ -29,14 +28,14 @@ public abstract class Gestionnaire {
 		for (int i = 1; i <= Plateau.nombreDeJoueurs(); i++) 
 		{
 			joueur_index = Plateau.getJoueur(i);
-			id_joueur = gestionnaireJoueur.isPlayerExistReturnId(Plateau.getJoueur(i));
+			id_joueur = getGestionnaireJoueur().isPlayerExistReturnId(Plateau.getJoueur(i));
 			
 			if(id_joueur <1)
-				gestionnaireJoueur.create(joueur_index);				
+				getGestionnaireJoueur().create(joueur_index);				
 			else
 				joueur_index.setId(id_joueur);
 			
-			gestionnaireJoueur.insertIntoParticipe(joueur_index);
+			getGestionnaireJoueur().insertIntoParticipe(joueur_index);
 		}
 		getGestionnairePlateau().create_joueur_courant();
 	}
@@ -47,19 +46,19 @@ public abstract class Gestionnaire {
 		
 		for (Carte carte : PaquetCartes.paquetCartes) 
 		{
-			gestionnaireCartes.update(carte);
+			getGestionnaireCartes().update(carte);
 		}
 		for (int i = 1; i <= Plateau.nombreDeJoueurs(); i++) 
 		{
-			gestionnaireJoueur.update(Plateau.getJoueur(i));	
+			getGestionnaireJoueur().update(Plateau.getJoueur(i));	
 		}
 		getGestionnairePlateau().update_joueur_courant();
 	}
 	
 	public void supprimerDataPartie()
 	{
-		gestionnaireCartes.deleteAll();
-		gestionnaireJoueur.deleteAll();
+		getGestionnaireCartes().deleteAll();
+		getGestionnaireJoueur().deleteAll();
 		getGestionnairePlateau().deleteAll();
 	}
 	
@@ -68,8 +67,9 @@ public abstract class Gestionnaire {
 	{
 		int choix_joueur = Joueur.SCANNER.nextInt();
 		int id_partie = PlateauDAO.dicoCompteurPlateau.get(choix_joueur);
+		System.out.println("id partie : " + id_partie);
+		getGestionnaireCartes().lireCartesDuPlateau(id_partie);
 		
-		gestionnaireCartes.lireCartesDuPlateau(id_partie);
 		return getGestionnairePlateau().read(id_partie);
 	}
 	
@@ -84,25 +84,25 @@ public abstract class Gestionnaire {
 		return  getGestionnairePlateau().listDePartieFinie();
 	}
 		
-	public static boolean enregistrerVainqueur()
+	public boolean enregistrerVainqueur()
 	{
-		return gestionnaireJoueur.enregistrerJoueurVainqueur();
+		return getGestionnaireJoueur().enregistrerJoueurVainqueur();
 	}
 
-	public static boolean deleteCartesEnMain() {
-		return gestionnaireCartes.deleteCartesEnMain();
+	public boolean deleteCartesEnMain() {
+		return getGestionnaireCartes().deleteCartesEnMain();
 	}
 
-	public static boolean createCartesEnMain() {
-		return gestionnaireCartes.createCartesEnMain();
+	public boolean createCartesEnMain() {
+		return getGestionnaireCartes().createCartesEnMain();
 	}
 
-	public static boolean supprimerCartesDuPaquet() 
+	public boolean supprimerCartesDuPaquet() 
 	{
-		return gestionnaireCartes.supprimerCartesDuPaquet();
+		return getGestionnaireCartes().supprimerCartesDuPaquet();
 	}
 
-	public static boolean supprimerJoueurCourant() {
-		return gestionnaireJoueur.supprimerJoueurCourant();
+	public boolean supprimerJoueurCourant() {
+		return getGestionnaireJoueur().supprimerJoueurCourant();
 	}
 }

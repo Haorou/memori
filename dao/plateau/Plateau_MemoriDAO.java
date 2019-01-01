@@ -1,4 +1,4 @@
-package dao;
+package dao.plateau;
 
 public class Plateau_MemoriDAO extends PlateauDAO 
 {

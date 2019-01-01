@@ -1,4 +1,4 @@
-package dao;
+package dao.cartes;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,22 +7,18 @@ import java.sql.Statement;
 
 import carte.Carte;
 import carte.PaquetCartes;
+import carte.motif.IMotif;
 import carte.motif.Motif_Memori;
+import dao.Connexion;
+import dao.DAO;
 import jeu.Plateau;
 
-public class CartesDAO extends DAO<Carte> {
+public abstract class CartesDAO extends DAO<Carte> {
 	private static final String TABLE = "carte";
 	private static final String CLE = "id_carte";
-
-	private static CartesDAO instance = null;
-
-	public static CartesDAO getInstance() {
-		if (instance == null) {
-			instance = new CartesDAO();
-		}
-		return instance;
-	}
-
+	
+	public abstract IMotif getMotif(int index);
+	
 	@Override
 	public boolean create(Carte obj) {
 		boolean succes = true;
@@ -104,7 +100,7 @@ public class CartesDAO extends DAO<Carte> {
 					positionIndex = -1;
 				
 				carteLu = new Carte(
-						Motif_Memori.get(rs.getInt("fk_id_motif_carte")), 
+						getMotif(rs.getInt("fk_id_motif_carte")), 
 						rs.getInt("est_trouve") == 1 ?true:false,
 						positionIndex);
 				

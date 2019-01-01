@@ -14,7 +14,7 @@ import view.ConsoleView;
 
 public class Plateau_PetitVerger extends Plateau 
 {
-	public final String JEU = "PetitVerger";
+	public final String JEU = "Petit Verger";
 	public final Gestionnaire gestionnaire = new GestionnairePetitVerger();
 	
 	final int POINTS_JOUEURS_A_ATTEINDRE = 5;
@@ -244,8 +244,8 @@ public class Plateau_PetitVerger extends Plateau
 		
 		ConsoleView.afficherMessages(messages);
 		
-		Gestionnaire.enregistrerVainqueur();
-		Gestionnaire.supprimerCartesDuPaquet();
-		Gestionnaire.supprimerJoueurCourant();
+		gestionnaire.enregistrerVainqueur();
+		gestionnaire.supprimerCartesDuPaquet();
+		gestionnaire.supprimerJoueurCourant();
 	}
 }
