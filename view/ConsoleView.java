@@ -10,6 +10,7 @@ public class ConsoleView
 	
 	public static void afficherTitre(String titre)
 	{
+		tiretsNomJeu = "";
 		for(int x = 0; x <= titre.length() ; x++)
 			tiretsNomJeu += "-";
 		

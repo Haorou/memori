@@ -38,6 +38,7 @@ public abstract class Controller
 		scoresDispo = getGestionnaire().listDePartieFinie();
 		if(scoresDispo.isEmpty())
 		{
+			ConsoleView.afficherMessage("");
 			ConsoleView.afficherMessage("Aucune partie finie disponible");			
 			ConsoleView.afficherMessage("");
 		}
@@ -85,7 +86,7 @@ public abstract class Controller
 		
 		getPlateau().combienCreerDeJoueurs();
 		
-		getGestionnaire().createDataPartie();	
+		getGestionnaire().createDataPartie(getPlateau());
 		getPlateau().jouer();
 		
 	}

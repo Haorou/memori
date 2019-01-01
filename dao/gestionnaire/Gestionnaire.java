@@ -16,9 +16,9 @@ public abstract class Gestionnaire {
 	
 	public abstract PlateauDAO getGestionnairePlateau();
 	
-	public void createDataPartie()
+	public void createDataPartie(Plateau plateauACreer)
 	{	
-		getGestionnairePlateau().create();
+		getGestionnairePlateau().create(plateauACreer);
 		for (Carte carte : PaquetCartes.paquetCartes) 
 		{
 			gestionnaireCartes.create(carte);	

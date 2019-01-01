@@ -12,10 +12,14 @@ public class Main {
 	
 	public static void main(String[] args) 
 	{
-		ConsoleView.afficherTitre("CHOISSISEZ UN JEU");
-		
+		ConsoleView.afficherTitre("JEUX DISPONIBLES");
+
+		ConsoleView.afficherMessage("");
 		ConsoleView.afficherMessage("1 - MEMORI");
 		ConsoleView.afficherMessage("2 - PETIT VERGER");
+		ConsoleView.afficherMessage("");
+		
+		ConsoleView.afficherOptions("CHOISISSEZ UN JEU");
 		
 		int choix_joueur = Joueur.SCANNER.nextInt();
 		while(choix_joueur < 1 || choix_joueur > 2)
