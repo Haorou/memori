@@ -67,7 +67,7 @@ public abstract class Gestionnaire {
 	{
 		int choix_joueur = Joueur.SCANNER.nextInt();
 		int id_partie = PlateauDAO.dicoCompteurPlateau.get(choix_joueur);
-		System.out.println("id partie : " + id_partie);
+
 		getGestionnaireCartes().lireCartesDuPlateau(id_partie);
 		
 		return getGestionnairePlateau().read(id_partie);

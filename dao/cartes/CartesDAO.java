@@ -8,7 +8,6 @@ import java.sql.Statement;
 import carte.Carte;
 import carte.PaquetCartes;
 import carte.motif.IMotif;
-import carte.motif.Motif_Memori;
 import dao.Connexion;
 import dao.DAO;
 import jeu.Plateau;
@@ -105,6 +104,9 @@ public abstract class CartesDAO extends DAO<Carte> {
 						positionIndex);
 				
 				carteLu.setId(rs.getInt("id_carte"));
+				
+				
+				carteLu.setDos(getMotif(rs.getInt("dos_carte")));
 			}
 		} 
 		catch (SQLException e) 
