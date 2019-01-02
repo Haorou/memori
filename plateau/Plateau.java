@@ -168,7 +168,7 @@ public abstract class Plateau
 	
 	private IMotif afficherCarte(int indice)
 	{
-		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif_Memori.DOSS;
+		return indice < PaquetCartes.getTaillePaquet()? PaquetCartes.get(indice).getAffichage():Motif_Memori.VIDE;
 	}
 
 	//----------------GERER SAUVEGARDE BD----------------//

@@ -26,18 +26,6 @@ public abstract class Carte {
 		this.affichage = this.getDos();
 		this.motifCarte = motif;
 	}
-
-	public Carte(IMotif motifDB, boolean estTrouveDB, int positionIndexPaquetDB, int id_carteDB)
-	{
-		this.motifCarte = motifDB;
-		this.estTrouve = estTrouveDB;
-		if(this.estTrouve)
-		{
-			this.affichage = this.motifCarte;
-		}
-		this.positionIndexPaquet = positionIndexPaquetDB;
-		this.id_carte = id_carteDB;
-	}
 	
 	public Carte(IMotif motifDB, boolean estTrouveDB, int positionIndexPaquetDB)
 	{

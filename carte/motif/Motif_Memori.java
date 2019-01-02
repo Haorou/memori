@@ -3,7 +3,7 @@ package carte.motif;
 public enum Motif_Memori implements IMotif 
 {
 	LOUP("  Loup   "), BICHE("  Biche  "),ABEILLE(" Abeille "),GUEPE("  Guêpe  "),CROCODILE("Crocodile"),
-	PIEUVRE(" Pieuvre "),HUITRE(" Huitre "),CHIEN("  Chien  "),CHAT("  Chat   "),COCHON(" Cochon  "),DOS("#########"), VIDE("         "),DOSS("---------");
+	PIEUVRE(" Pieuvre "),HUITRE(" Huitre "),CHIEN("  Chien  "),CHAT("  Chat   "),COCHON(" Cochon  "),DOS("#########"), VIDE("         ");
 	
 	private static final IMotif[] TABLEAU = Motif_Memori.values();
 	String message = "";
